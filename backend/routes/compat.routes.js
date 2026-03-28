@@ -1,0 +1,345 @@
+// /**
+//  * compat.routes.js
+//  * ─────────────────────────────────────────────────────────────────────────────
+//  * These routes match your EXISTING frontend API calls exactly so you don't
+//  * need to change any frontend files.
+//  *
+//  * Frontend call                         → Maps to
+//  * ─────────────────────────────────────────────────────────────────────────────
+//  * GET  /api/jobs/all                    → list all active jobs (public)
+//  * POST /api/jobs/add                    → create job (admin)
+//  * PUT  /api/jobs/update/:id             → update job (admin)
+//  * DELETE /api/jobs/delete/:id           → delete job (admin)
+//  * GET  /api/careers/all                 → list all applications (admin)
+//  * DELETE /api/careers/delete/:id        → delete application (admin)
+//  * POST /api/send-email                  → contact form submit
+//  */
+
+// const express = require("express");
+// const router  = express.Router();
+
+// const Job         = require("../models/Job.model");
+// const Application = require("../models/Application.model");
+// const Contact     = require("../models/Contact.model");
+// const { protect } = require("../middleware/auth.middleware");
+// const {
+//   sendContactConfirmationToUser,
+//   sendContactNotificationToAdmin,
+// } = require("../utils/email.utils");
+
+// // ─── PUBLIC: GET /api/jobs/all ────────────────────────────────────────────────
+// // Used by: Careers.jsx (public job listings) + AdminCareers.jsx job tab
+// router.get("/jobs/all", async (req, res) => {
+//   try {
+//     const jobs = await Job.find({ isActive: true }).sort({ createdAt: -1 });
+//     res.json(jobs);                            // returns plain array (frontend expects this)
+//   } catch (err) {
+//     res.status(500).json({ message: err.message });
+//   }
+// });
+
+// // ─── ADMIN: POST /api/jobs/add ────────────────────────────────────────────────
+// router.post("/jobs/add", protect, async (req, res) => {
+//   try {
+//     const { title, type, location, description, department, experience, salary } = req.body;
+
+//     if (!title || !type) {
+//       return res.status(400).json({ message: "Title and type are required." });
+//     }
+
+//     const job = await Job.create({
+//       title,
+//       type,
+//       location:    location    || "Remote",
+//       description: description || "",
+//       department:  department  || "General",
+//       experience:  experience  || "Any",
+//       salary:      salary      || "",
+//     });
+
+//     res.status(201).json(job);
+//   } catch (err) {
+//     res.status(500).json({ message: err.message });
+//   }
+// });
+
+// // ─── ADMIN: PUT /api/jobs/update/:id ─────────────────────────────────────────
+// router.put("/jobs/update/:id", protect, async (req, res) => {
+//   try {
+//     const job = await Job.findByIdAndUpdate(req.params.id, req.body, { new: true });
+//     if (!job) return res.status(404).json({ message: "Job not found." });
+//     res.json(job);
+//   } catch (err) {
+//     res.status(500).json({ message: err.message });
+//   }
+// });
+
+// // ─── ADMIN: DELETE /api/jobs/delete/:id ──────────────────────────────────────
+// router.delete("/jobs/delete/:id", protect, async (req, res) => {
+//   try {
+//     await Job.findByIdAndDelete(req.params.id);
+//     res.json({ success: true });
+//   } catch (err) {
+//     res.status(500).json({ message: err.message });
+//   }
+// });
+
+// // ─── ADMIN: GET /api/careers/all ─────────────────────────────────────────────
+// // AdminCareers.jsx fetches applications at this URL
+// router.get("/careers/all", protect, async (req, res) => {
+//   try {
+//     const apps = await Application.find()
+//       .populate("job", "title department")
+//       .sort({ createdAt: -1 });
+
+//     // Remap fields to match what AdminCareers.jsx expects
+//     const mapped = apps.map((a) => ({
+//       _id:          a._id,
+//       fullName:     a.name,
+//       email:        a.email,
+//       phone:        a.phone,
+//       position:     a.jobTitle || a.job?.title || "",
+//       portfolioUrl: a.portfolio || a.linkedIn || "",
+//       message:      a.coverLetter || "",
+//       file:         a.resume ? a.resume.replace("/uploads/resumes/", "") : "",
+//       status:       a.status,
+//       createdAt:    a.createdAt,
+//     }));
+
+//     res.json(mapped);
+//   } catch (err) {
+//     res.status(500).json({ message: err.message });
+//   }
+// });
+
+// // ─── ADMIN: DELETE /api/careers/delete/:id ───────────────────────────────────
+// router.delete("/careers/delete/:id", protect, async (req, res) => {
+//   try {
+//     await Application.findByIdAndDelete(req.params.id);
+//     res.json({ success: true });
+//   } catch (err) {
+//     res.status(500).json({ message: err.message });
+//   }
+// });
+
+// // ─── PUBLIC: POST /api/send-email ────────────────────────────────────────────
+// // Contact.jsx sends to this endpoint
+// router.post("/send-email", async (req, res) => {
+//   try {
+//     const { name, email, message } = req.body;
+
+//     if (!name || !email || !message) {
+//       return res.status(400).json({ success: false, message: "Name, email and message are required." });
+//     }
+
+//     // Parse subject + phone out of the message string Contact.jsx sends:
+//     // "Service: Digital Marketing\nPhone: +1...\n\n<actual message>"
+//     const lines   = message.split("\n");
+//     const service = lines[0]?.replace("Service: ", "").trim() || "General Inquiry";
+//     const phone   = lines[1]?.replace("Phone: ", "").trim()   || "";
+//     const body    = lines.slice(3).join("\n").trim() || message;
+
+//     // Save to DB
+//     await Contact.create({
+//       name,
+//       email,
+//       phone,
+//       subject: service,
+//       message: body,
+//     });
+
+//     // Send emails (non-blocking)
+//     Promise.allSettled([
+//       sendContactConfirmationToUser({ name, email, subject: service }),
+//       sendContactNotificationToAdmin({ name, email, phone, subject: service, message: body }),
+//     ]);
+
+//     res.json({ success: true, message: "Message sent successfully!" });
+//   } catch (err) {
+//     res.status(500).json({ success: false, message: err.message });
+//   }
+// });
+
+// module.exports = router;
+
+
+const express = require("express");
+const router  = express.Router();
+
+const Job         = require("../models/Job.model");
+const Application = require("../models/Application.model");
+const Contact     = require("../models/Contact.model");
+const { protect } = require("../middleware/auth.middleware");
+const { uploadResume } = require("../middleware/upload.middleware");
+const {
+  sendContactConfirmationToUser,
+  sendContactNotificationToAdmin,
+  sendApplicationConfirmation,
+  sendApplicationNotificationToAdmin,
+} = require("../utils/email.utils");
+
+// ─── PUBLIC: GET /api/jobs/all ────────────────────────────────────────────────
+router.get("/jobs/all", async (req, res) => {
+  try {
+    const jobs = await Job.find({ isActive: true }).sort({ createdAt: -1 });
+    res.json(jobs);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// ─── ADMIN: POST /api/jobs/add ────────────────────────────────────────────────
+router.post("/jobs/add", protect, async (req, res) => {
+  try {
+    const { title, type, location, description, department, experience, salary } = req.body;
+    if (!title || !type) {
+      return res.status(400).json({ message: "Title and type are required." });
+    }
+    const job = await Job.create({
+      title,
+      type,
+      location:    location    || "Remote",
+      description: description || "",
+      department:  department  || "General",
+      experience:  experience  || "Any",
+      salary:      salary      || "",
+    });
+    res.status(201).json(job);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// ─── ADMIN: PUT /api/jobs/update/:id ─────────────────────────────────────────
+router.put("/jobs/update/:id", protect, async (req, res) => {
+  try {
+    const job = await Job.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!job) return res.status(404).json({ message: "Job not found." });
+    res.json(job);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// ─── ADMIN: DELETE /api/jobs/delete/:id ──────────────────────────────────────
+router.delete("/jobs/delete/:id", protect, async (req, res) => {
+  try {
+    await Job.findByIdAndDelete(req.params.id);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// ─── PUBLIC: POST /api/careers/apply ─────────────────────────────────────────
+// Careers.jsx sends: fullName, email, phone, position (title text), resume file
+router.post("/careers/apply", uploadResume.single("resume"), async (req, res) => {
+  try {
+    const { fullName, email, phone, position, portfolioUrl, message } = req.body;
+
+    if (!fullName || !email || !phone || !position) {
+      return res.status(400).json({ success: false, message: "Please fill all required fields." });
+    }
+
+    // Find job by title (frontend sends title, not _id)
+    let job = await Job.findOne({ title: position, isActive: true });
+
+    // If "General Application" or job not found, still allow submission
+    if (!job && position !== "General Application") {
+      // Try case-insensitive match
+      job = await Job.findOne({ title: { $regex: new RegExp(`^${position}$`, "i") }, isActive: true });
+    }
+
+    const application = await Application.create({
+      job:         job?._id || null,
+      jobTitle:    position,
+      name:        fullName,
+      email,
+      phone,
+      portfolio:   portfolioUrl || "",
+      coverLetter: message || "",
+      resume:      req.file ? `/uploads/resumes/${req.file.filename}` : "",
+    });
+
+    // Increment count if job found
+    if (job) {
+      job.applicationsCount += 1;
+      await job.save();
+    }
+
+    // Send emails (non-blocking)
+    Promise.allSettled([
+      sendApplicationConfirmation({ name: fullName, email, jobTitle: position }),
+      sendApplicationNotificationToAdmin({ name: fullName, email, phone, jobTitle: position }),
+    ]);
+
+    res.status(201).json({ success: true, message: "Application submitted successfully!", application });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// ─── ADMIN: GET /api/careers/all ─────────────────────────────────────────────
+router.get("/careers/all", protect, async (req, res) => {
+  try {
+    const apps = await Application.find()
+      .populate("job", "title department")
+      .sort({ createdAt: -1 });
+
+    const mapped = apps.map((a) => ({
+      _id:          a._id,
+      fullName:     a.name,
+      email:        a.email,
+      phone:        a.phone,
+      position:     a.jobTitle || a.job?.title || "",
+      portfolioUrl: a.portfolio || a.linkedIn || "",
+      message:      a.coverLetter || "",
+      file:         a.resume ? a.resume.replace("/uploads/resumes/", "") : "",
+      status:       a.status,
+      createdAt:    a.createdAt,
+    }));
+
+    res.json(mapped);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// ─── ADMIN: DELETE /api/careers/delete/:id ───────────────────────────────────
+router.delete("/careers/delete/:id", protect, async (req, res) => {
+  try {
+    await Application.findByIdAndDelete(req.params.id);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// ─── PUBLIC: POST /api/send-email ────────────────────────────────────────────
+router.post("/send-email", async (req, res) => {
+  try {
+    const { name, email, message } = req.body;
+
+    if (!name || !email || !message) {
+      return res.status(400).json({ success: false, message: "Name, email and message are required." });
+    }
+
+    const lines   = message.split("\n");
+    const service = lines[0]?.replace("Service: ", "").trim() || "General Inquiry";
+    const phone   = lines[1]?.replace("Phone: ", "").trim()   || "";
+    const body    = lines.slice(3).join("\n").trim() || message;
+
+    await Contact.create({ name, email, phone, subject: service, message: body });
+
+    Promise.allSettled([
+      sendContactConfirmationToUser({ name, email, subject: service }),
+      sendContactNotificationToAdmin({ name, email, phone, subject: service, message: body }),
+    ]);
+
+    res.json({ success: true, message: "Message sent successfully!" });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+module.exports = router;
