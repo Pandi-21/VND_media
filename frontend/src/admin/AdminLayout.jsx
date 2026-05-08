@@ -41,7 +41,7 @@ export default function AdminLayout() {
           Logout
         </button>
       </div>
-      <div className="flex-1 p-8">
+      <div className="flex-1 min-w-0">
         <Outlet />
       </div>
     </div>

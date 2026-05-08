@@ -1,5 +1,4 @@
 import { useEffect, useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
 
 const BASE =
   process.env.NODE_ENV === "production"
@@ -59,7 +58,6 @@ function InputField({ label, required, ...props }) {
 // ─── MAIN COMPONENT ───────────────────────────────────────────────────────────
 
 export default function AdminCareers() {
-  const navigate  = useNavigate();
   const [tab, setTab]               = useState("jobs");        // "jobs" | "applications"
   const [jobs, setJobs]             = useState([]);
   const [apps, setApps]             = useState([]);
@@ -160,11 +158,6 @@ export default function AdminCareers() {
 
   // ── logout ────────────────────────────────────────────────────────────────
 
-  const logout = () => {
-    localStorage.removeItem("vnd_admin_token");
-    navigate("/admin/login");
-  };
-
   // ── derived ───────────────────────────────────────────────────────────────
 
   const positions = [...new Set(apps.map((a) => a.position).filter(Boolean))];
@@ -196,22 +189,6 @@ export default function AdminCareers() {
       )}
 
       {/* ── Header ── */}
-      <header className="border-b border-white/[0.06] px-6 py-4 flex items-center justify-between sticky top-0 z-40 bg-[#0a0a0a]/95 backdrop-blur-sm">
-        <div className="flex items-center gap-3">
-          <div className="w-7 h-7 rounded-md flex items-center justify-center" style={{ background: "#0BB80F" }}>
-            <span className="text-black font-black text-xs">V</span>
-          </div>
-          <span className="font-extrabold tracking-widest text-xs text-white">VND MEDIA</span>
-          <span className="text-gray-700 text-xs ml-1">/ ADMIN</span>
-        </div>
-        <button
-          onClick={logout}
-          className="text-[10px] tracking-widest text-gray-600 hover:text-red-400 transition-colors border border-white/10 hover:border-red-500/30 px-3 py-1.5 rounded-lg"
-        >
-          LOGOUT
-        </button>
-      </header>
-
       <div className="max-w-6xl mx-auto px-6 py-8">
 
         {/* ── Page title + stats ── */}

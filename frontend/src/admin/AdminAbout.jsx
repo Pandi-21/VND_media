@@ -260,6 +260,7 @@ const AdminAbout = () => {
   };
 
   return (
+    
     <div style={s.page}>
       {toast && (
         <div
