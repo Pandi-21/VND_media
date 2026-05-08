@@ -1,8 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import '../styles/main.css';
 import { FiTrendingUp,FiCode ,FiPenTool  } from "react-icons/fi";
+import { motion } from "framer-motion";
+
+const API_ROOT = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_BASE = API_ROOT.endsWith("/api") ? API_ROOT : `${API_ROOT}/api`;
 
 const useCountUp = (end, duration = 2500) => {
   const [count, setCount] = useState(0);
@@ -72,18 +76,53 @@ const services = [
 ];
 
 const Home = () => {
+  const navigate = useNavigate();
   const [openFaq, setOpenFaq] = useState(null);
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    service: "Performance Marketing",
+    message: "",
+  });
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    alert("Thank you for reaching out! We'll contact you soon.");
-    setFormData({ name: '', email: '', message: '' });
+    try {
+      const res = await fetch(`${API_BASE}/contact`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          subject: formData.service,
+          service: formData.service,
+          message: formData.message,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || "Failed to send inquiry.");
+      }
+
+      alert("Thank you for reaching out! We'll contact you soon.");
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        service: "Performance Marketing",
+        message: "",
+      });
+    } catch (error) {
+      alert(error.message || "Unable to send inquiry right now.");
+    }
   };
 
   return (
@@ -102,8 +141,13 @@ const Home = () => {
             We combine high-end aesthetic with know-how tech to scale brands into the next dimension of digital success.
           </p>
           <div className="hero-btns">
-            <button className="btn-primary">Start Your Project</button>
-            <button className="btn-secondary">View Work</button>
+            <button className="btn-primary" onClick={() => navigate("/contact")}>Start Your Project</button>
+            <button
+              className="btn-secondary"
+              onClick={() => document.getElementById("work")?.scrollIntoView({ behavior: "smooth" })}
+            >
+              View Work
+            </button>
           </div>
         </div>
       </section>
@@ -174,7 +218,8 @@ const Home = () => {
       </section>
 
       {/* PROCESS */}
-    <section id="about" className="section">
+ {/* PROCESS */}
+<section id="about" className="section">
   <div className="section-label">ROADMAP</div>
   <h2 className="section-title">Seamless Execution</h2>
 
@@ -185,17 +230,28 @@ const Home = () => {
       { label: "Execution", desc: "Rapid prototyping, development and elite-level design crafting.", side: "left" },
       { label: "Scaling", desc: "Post-launch optimization and automated growth loops.", side: "right" },
     ].map((step, i) => (
-      <div className={`timeline-row ${step.side}`} key={i}>
+      
+      <motion.div
+        key={i}
+        className={`timeline-row ${step.side}`}
+        
+        // Cleaner animation - just fade and slide
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: i * 0.15 }}
+        viewport={{ once: true, margin: "-50px" }}
+      >
         <div className="timeline-content">
           <h4>{step.label}</h4>
           <p>{step.desc}</p>
         </div>
+
         <div className="timeline-dot" />
         <div className="timeline-spacer" />
-      </div>
+      </motion.div>
     ))}
   </div>
-</section>
+</section>d
 
       {/* RECENT PROJECTS */}
       <section id="work" className="section">
@@ -292,7 +348,7 @@ const Home = () => {
     <p>
       Join the elite rank of businesses dominating their industry with futuristic digital power.
     </p>
-    <button className="btn-primary text-[15px] px-9 py-4 rounded-full">
+    <button className="btn-primary text-[15px] px-9 py-4 rounded-full" onClick={() => navigate("/contact")}>
       Get Your Free Audit
     </button>
   </div>
@@ -337,13 +393,26 @@ const Home = () => {
             required
           />
         </div>
-        <select name="service" className="contact-select">
-          <option value="">Select Service</option>
-          <option value="marketing">Performance Marketing</option>
-          <option value="dev">Tech Development</option>
-          <option value="brand">Visual Identity</option>
-          <option value="consulting">Consulting</option>
-        </select>
+        <div className="contact-form-row">
+          <input
+            type="text"
+            name="phone"
+            placeholder="Phone Number"
+            value={formData.phone}
+            onChange={handleInputChange}
+          />
+          <select
+            name="service"
+            className="contact-select"
+            value={formData.service}
+            onChange={handleInputChange}
+          >
+            <option value="Performance Marketing">Performance Marketing</option>
+            <option value="Tech Development">Tech Development</option>
+            <option value="Visual Identity">Visual Identity</option>
+            <option value="Consulting">Consulting</option>
+          </select>
+        </div>
         <textarea
           name="message"
           rows={5}

@@ -31,7 +31,7 @@ const sendEmail = async (opts) => {
  * Send contact form confirmation to the user
  */
 const sendContactConfirmationToUser = async ({ name, email, subject }) => {
-  await transporter.sendMail({
+  await sendEmail({
     from: `"Your Company" <${process.env.EMAIL_FROM}>`,
     to: email,
     subject: `We received your message – ${subject}`,
@@ -51,7 +51,7 @@ const sendContactConfirmationToUser = async ({ name, email, subject }) => {
  * Notify admin about new contact form submission
  */
 const sendContactNotificationToAdmin = async ({ name, email, phone, subject, message }) => {
-  await transporter.sendMail({
+  await sendEmail({
     from: `"Website Contact Form" <${process.env.EMAIL_FROM}>`,
     to: process.env.ADMIN_EMAIL,
     subject: `📩 New Contact Form: ${subject}`,
@@ -76,7 +76,7 @@ const sendContactNotificationToAdmin = async ({ name, email, phone, subject, mes
  * Send application confirmation to applicant
  */
 const sendApplicationConfirmation = async ({ name, email, jobTitle }) => {
-  await transporter.sendMail({
+  await sendEmail({
     from: `"Careers at Your Company" <${process.env.EMAIL_FROM}>`,
     to: email,
     subject: `Application Received – ${jobTitle}`,
@@ -96,7 +96,7 @@ const sendApplicationConfirmation = async ({ name, email, jobTitle }) => {
  * Notify admin about new job application
  */
 const sendApplicationNotificationToAdmin = async ({ name, email, phone, jobTitle }) => {
-  await transporter.sendMail({
+  await sendEmail({
     from: `"Careers Portal" <${process.env.EMAIL_FROM}>`,
     to: process.env.ADMIN_EMAIL,
     subject: `🧑‍💼 New Application: ${jobTitle}`,

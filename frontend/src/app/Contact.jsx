@@ -1,260 +1,66 @@
-// import { useState } from "react";
-// import Header from "../components/Header";
-// import Footer from "../components/Footer";
-
-// const NAV_LINKS = ["Work", "Services", "About", "Contact"];
-
-// const FAQS = [
-//   {
-//     q: "How fast will you respond?",
-//     a: "We typically respond within 2–4 business hours. For urgent inquiries, reach us directly via WhatsApp or Instant Call.",
-//   },
-//   {
-//     q: "Do you offer free consultation?",
-//     a: "Yes! We offer a complimentary 30-minute strategy session to understand your goals and see how we can help scale your brand.",
-//   },
-// ];
-
-// export default function Contact() {
-  
-//   const [form, setForm] = useState({ name: "", email: "", phone: "", service: "Digital Marketing", message: "" });
-//   const [openFaq, setOpenFaq] = useState(null);
-
-//   const handleInput = (e) => setForm({ ...form, [e.target.name]: e.target.value });
-
-//   return (
-//     <div style={{ fontFamily: "'Helvetica Neue', Arial, sans-serif" }} className="bg-[#0a0a0a] text-white min-h-screen">
-
-//     <Header />
-      
-
-//       {/* ── HERO ── */}
-//       <section className="relative pt-40 pb-28 px-6 text-center overflow-hidden">
-//         {/* Radial green glow */}
-//         <div className="absolute inset-0 flex items-end justify-center pointer-events-none pb-0">
-//           <div className="w-[500px] h-48 rounded-full blur-3xl opacity-15" style={{ background: "#0BB80F" }} />
-//         </div>
-//         <div className="relative z-10">
-//           <h1 className="text-5xl md:text-7xl font-extrabold italic leading-tight">
-//             Let's <span style={{ color: "#0BB80F" }}>Connect</span>
-//           </h1>
-//           <p className="mt-5 text-gray-400 text-sm max-w-sm mx-auto leading-relaxed">
-//             Enter the void of digital excellence. Whether you're scaling or starting, our hyper-luminescent strategies illuminate your path to market dominance.
-//           </p>
-//         </div>
-//       </section>
-
-//       {/* ── CONTACT INFO CARDS ── */}
-//       <section className="px-6 pb-20 max-w-5xl mx-auto">
-//         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-//           {/* Email */}
-//           <div className="bg-[#141414] border border-white/5 rounded-2xl p-6 hover:border-[#0BB80F]/20 transition-all">
-//             <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-4" style={{ background: "#0BB80F15", border: "1px solid #0BB80F30" }}>
-//               <span className="text-sm" style={{ color: "#0BB80F" }}>✉</span>
-//             </div>
-//             <h3 className="font-bold italic text-base mb-3">Email</h3>
-//             <p className="text-gray-400 text-xs mb-1">hello@vndmedia.com</p>
-//             <p className="text-gray-400 text-xs">support@vndmedia.com</p>
-//           </div>
-
-//           {/* Phone */}
-//           <div className="bg-[#141414] border border-white/5 rounded-2xl p-6 hover:border-[#0BB80F]/20 transition-all">
-//             <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-4" style={{ background: "#0BB80F15", border: "1px solid #0BB80F30" }}>
-//               <span className="text-sm" style={{ color: "#0BB80F" }}>📞</span>
-//             </div>
-//             <h3 className="font-bold italic text-base mb-3">Phone</h3>
-//             <p className="text-gray-400 text-xs mb-1">+1 (555) 0123-4567</p>
-//             <p className="text-gray-400 text-xs">+1 (555) 0123-8888</p>
-//           </div>
-
-//           {/* Location */}
-//           <div className="bg-[#141414] border border-white/5 rounded-2xl p-6 hover:border-[#0BB80F]/20 transition-all">
-//             <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-4" style={{ background: "#0BB80F15", border: "1px solid #0BB80F30" }}>
-//               <span className="text-sm" style={{ color: "#0BB80F" }}>📍</span>
-//             </div>
-//             <h3 className="font-bold italic text-base mb-3">Location</h3>
-//             <p className="text-gray-400 text-xs mb-1">42 Future Plaza, Neo-District</p>
-//             <p className="text-gray-400 text-xs">The Hyper-Void, 10101</p>
-//           </div>
-//         </div>
-//       </section>
-
-//       {/* ── MANIFEST YOUR VISION + FORM ── */}
-//       <section className="px-6 pb-20 max-w-5xl mx-auto">
-//         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
-//           {/* Left */}
-//           <div>
-//             <h2 className="text-3xl font-extrabold italic leading-snug mb-4">
-//               Manifest Your<br />Vision.
-//             </h2>
-//             <p className="text-gray-400 text-sm leading-relaxed mb-8">
-//               We don't just run ads; we engineer digital presence. Share your goals, and let's build something immortal.
-//             </p>
-
-//             {/* Map placeholder */}
-//             <div className="rounded-2xl overflow-hidden h-44 bg-[#161616] border border-white/5 relative flex items-center justify-center mb-6">
-//               {/* Simulated map */}
-//               <div className="absolute inset-0 opacity-20">
-//                 {[...Array(6)].map((_, i) => (
-//                   <div key={i} className="absolute left-0 right-0 h-px bg-white/10" style={{ top: `${15 + i * 14}%` }} />
-//                 ))}
-//                 {[...Array(5)].map((_, i) => (
-//                   <div key={i} className="absolute top-0 bottom-0 w-px bg-white/10" style={{ left: `${15 + i * 17}%` }} />
-//                 ))}
-//               </div>
-//               {/* Map pin */}
-//               <div className="relative z-10 flex flex-col items-center">
-//                 <div className="w-8 h-8 rounded-full border-2 flex items-center justify-center mb-1" style={{ borderColor: "#0BB80F", background: "#00ff7f20" }}>
-//                   <span className="text-xs" style={{ color: "#0BB80F" }}>📍</span>
-//                 </div>
-//                 <div className="w-0 h-0" style={{ borderLeft: "6px solid transparent", borderRight: "6px solid transparent", borderTop: "10px solid #0BB80F" }} />
-//               </div>
-//               <p className="absolute bottom-3 left-0 right-0 text-center text-xs text-gray-600 tracking-widest">NOMNOM</p>
-//             </div>
-
-//             {/* Avatars */}
-//             <div className="flex items-center gap-3">
-//               <div className="flex -space-x-2">
-//                 {["MV", "EC", "DG"].map((init, i) => (
-//                   <div key={i} className="w-8 h-8 rounded-full border-2 border-[#0a0a0a] bg-[#222] flex items-center justify-center text-xs font-bold text-gray-400">
-//                     {init}
-//                   </div>
-//                 ))}
-//               </div>
-//               <p className="text-gray-500 text-xs leading-tight">
-//                 Our digital architects are<br />ready to assist you.
-//               </p>
-//             </div>
-//           </div>
-
-//           {/* Right: Form */}
-//           <div className="bg-[#141414] border border-white/5 rounded-2xl p-6">
-//             <div className="grid grid-cols-2 gap-4 mb-4">
-//               <div>
-//                 <label className="text-xs text-gray-500 mb-1.5 block tracking-wider">NAME</label>
-//                 <input name="name" value={form.name} onChange={handleInput} placeholder="John Doe" className="w-full bg-[#0a0a0a] border border-white/10 rounded-lg px-3 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#0BB80F]/40 transition-colors" />
-//               </div>
-//               <div>
-//                 <label className="text-xs text-gray-500 mb-1.5 block tracking-wider">EMAIL</label>
-//                 <input name="email" value={form.email} onChange={handleInput} placeholder="john@example.com" type="email" className="w-full bg-[#0a0a0a] border border-white/10 rounded-lg px-3 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#0BB80F]/40 transition-colors" />
-//               </div>
-//             </div>
-//             <div className="grid grid-cols-2 gap-4 mb-4">
-//               <div>
-//                 <label className="text-xs text-gray-500 mb-1.5 block tracking-wider">PHONE</label>
-//                 <input name="phone" value={form.phone} onChange={handleInput} placeholder="+1..." className="w-full bg-[#0a0a0a] border border-white/10 rounded-lg px-3 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#0BB80F]/40 transition-colors" />
-//               </div>
-//               <div>
-//                 <label className="text-xs text-gray-500 mb-1.5 block tracking-wider">SERVICE</label>
-//                 <select name="service" value={form.service} onChange={handleInput} className="w-full bg-[#0a0a0a] border border-white/10 rounded-lg px-3 py-2.5 text-sm text-gray-300 focus:outline-none focus:border-[#0BB80F]/40 transition-colors appearance-none">
-//                   <option>Digital Marketing</option>
-//                   <option>Meta Ads</option>
-//                   <option>Google Ads</option>
-//                   <option>SEO Optimization</option>
-//                   <option>Content Creation</option>
-//                   <option>Lead Generation</option>
-//                 </select>
-//               </div>
-//             </div>
-//             <div className="mb-4">
-//               <label className="text-xs text-gray-500 mb-1.5 block tracking-wider">MESSAGE</label>
-//               <textarea name="message" value={form.message} onChange={handleInput} placeholder="Tell us about your project..." rows={4} className="w-full bg-[#0a0a0a] border border-white/10 rounded-lg px-3 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#0BB80F]/40 transition-colors resize-none" />
-//             </div>
-//             <button className="w-full text-black font-bold text-sm py-3.5 rounded-xl tracking-widest hover:opacity-90 transition-opacity" style={{ background: "#0BB80F" }}>
-//               SEND INQUIRY
-//             </button>
-//           </div>
-//         </div>
-
-//         {/* WhatsApp + Instant Call */}
-//         <div className="flex flex-wrap justify-center gap-4 mt-12">
-//           <button className="flex items-center gap-2 border border-white/10 rounded-full px-6 py-3 text-sm font-semibold hover:border-[#0BB80F]/40 transition-colors">
-//             <span style={{ color: "#0BB80F" }}>💬</span> WhatsApp Us
-//           </button>
-//           <button className="flex items-center gap-2 border border-white/10 rounded-full px-6 py-3 text-sm font-semibold hover:border-[#0BB80F]/40 transition-colors">
-//             <span style={{ color: "#0BB80F" }}>📲</span> Instant Call
-//           </button>
-//         </div>
-//       </section>
-
-//       {/* ── FAQ ── */}
-//       <section className="px-6 pb-24 max-w-2xl mx-auto text-center">
-//         <h2 className="text-2xl font-extrabold italic mb-10">F.A.Q</h2>
-//         <div className="space-y-3">
-//           {FAQS.map((faq, i) => (
-//             <div key={i} className="bg-[#141414] border border-white/5 rounded-xl overflow-hidden">
-//               <button
-//                 onClick={() => setOpenFaq(openFaq === i ? null : i)}
-//                 className="w-full flex items-center justify-between px-6 py-4 text-left hover:bg-white/2 transition-colors"
-//               >
-//                 <span className="text-sm font-medium">{faq.q}</span>
-//                 <span className="text-lg text-gray-400 transition-transform" style={{ transform: openFaq === i ? "rotate(45deg)" : "none" }}>+</span>
-//               </button>
-//               {openFaq === i && (
-//                 <div className="px-6 pb-4">
-//                   <p className="text-gray-400 text-sm leading-relaxed text-left">{faq.a}</p>
-//                 </div>
-//               )}
-//             </div>
-//           ))}
-//         </div>
-//       </section>
-
-//       {/* ── BOTTOM CTA ── */}
-//       <section className="px-6 pb-24 max-w-3xl mx-auto text-center">
-//         <h2 className="text-4xl md:text-5xl font-extrabold italic leading-tight mb-8">
-//           Ready to Start Your<br />Project?
-//         </h2>
-//         <button className="text-black font-bold px-8 py-4 rounded-full text-sm tracking-widest hover:opacity-90 transition-opacity" style={{ background: "#0BB80F" }}>
-//           LET'S TALK NOW
-//         </button>
-//       </section>
-
-//       {/* ── FOOTER ── */}
-//        <Footer />
-//     </div>
-//   );
-// }
-
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
-
-const NAV_LINKS = ["Work", "Services", "About", "Contact"];
+const API_ROOT = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_BASE = API_ROOT.endsWith("/api") ? API_ROOT : `${API_ROOT}/api`;
+const accent = "#0BB80F";
 
 const FAQS = [
   {
-    q: "How fast will you respond?",
-    a: "We typically respond within 2–4 business hours. For urgent inquiries, reach us directly via WhatsApp or Instant Call.",
+    q: "How quickly will you respond?",
+    a: "Most inquiries get a response within one business day. If the project is urgent, use WhatsApp or call directly for a faster first touch.",
   },
   {
-    q: "Do you offer free consultation?",
-    a: "Yes! We offer a complimentary 30-minute strategy session to understand your goals and see how we can help scale your brand.",
+    q: "Can I contact you without a full brief?",
+    a: "Yes. Even if you only have an idea, we can help shape the scope, priorities, and next best steps during the first discussion.",
+  },
+  {
+    q: "What kind of projects do you take?",
+    a: "We support branding, marketing, websites, creative campaigns, and performance-focused digital growth work for brands that want clear execution.",
   },
 ];
 
-export default function Contact() {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    service: "Digital Marketing",
-    message: "",
-  });
+const CONTACT_CARDS = [
+  {
+    title: "Email",
+    lines: ["hello@vndmedia.agency", "support@vndmedia.agency"],
+  },
+  {
+    title: "Phone",
+    lines: ["+91 93630 06565", "+91 93630 06566"],
+  },
+  {
+    title: "Location",
+    lines: ["Palani, Tamil Nadu", "VND Media Group"],
+  },
+];
 
-  const [openFaq, setOpenFaq]   = useState(null);
-  const [status, setStatus]     = useState("idle"); // idle | loading | success | error
+const initialForm = {
+  name: "",
+  email: "",
+  phone: "",
+  service: "Digital Marketing",
+  message: "",
+};
+
+export default function Contact() {
+  const [form, setForm] = useState(initialForm);
+  const [openFaq, setOpenFaq] = useState(null);
+  const [status, setStatus] = useState("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
-  const handleInput = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleInput = (e) => {
+    setForm((current) => ({ ...current, [e.target.name]: e.target.value }));
+  };
 
-  const handleSubmit = async () => {
-    // Basic client-side check
-    if (!form.name || !form.email || !form.message) {
-      setErrorMsg("Name, Email and Message are required.");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
       setStatus("error");
+      setErrorMsg("Name, email, and message are required.");
       return;
     }
 
@@ -262,273 +68,327 @@ export default function Contact() {
     setErrorMsg("");
 
     try {
-      const res = await fetch(`${API_BASE}/api/send-email`, {
+      const res = await fetch(`${API_BASE}/contact`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name   : form.name,
-          email  : form.email,
-          message: `Service: ${form.service}\nPhone: ${form.phone || "N/A"}\n\n${form.message}`,
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          subject: form.service,
+          service: form.service,
+          message: form.message,
         }),
       });
 
       const data = await res.json();
 
-      if (data.success) {
-        setStatus("success");
-        setForm({ name: "", email: "", phone: "", service: "Digital Marketing", message: "" });
-      } else {
-        setErrorMsg(data.message || "Something went wrong. Please try again.");
-        setStatus("error");
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || "Unable to send your inquiry right now.");
       }
-    } catch (err) {
-      setErrorMsg("Unable to reach the server. Please try again later.");
+
+      setStatus("success");
+      setForm(initialForm);
+    } catch (error) {
       setStatus("error");
+      setErrorMsg(error.message || "Unable to reach the server right now.");
     }
   };
 
   return (
-    <div style={{ fontFamily: "'Helvetica Neue', Arial, sans-serif" }} className="bg-[#0a0a0a] text-white min-h-screen">
+    <div className="min-h-screen bg-[#080808] text-white">
       <Header />
 
-      {/* ── HERO ── */}
-      <section className="relative pt-40 pb-28 px-6 text-center overflow-hidden">
-        <div className="absolute inset-0 flex items-end justify-center pointer-events-none pb-0">
-          <div className="w-[500px] h-48 rounded-full blur-3xl opacity-15" style={{ background: "#0BB80F" }} />
-        </div>
-        <div className="relative z-10">
-          <h1 className="text-5xl md:text-7xl font-extrabold italic leading-tight">
-            Let's <span style={{ color: "#0BB80F" }}>Connect</span>
-          </h1>
-          <p className="mt-5 text-gray-400 text-sm max-w-sm mx-auto leading-relaxed">
-            Enter the void of digital excellence. Whether you're scaling or starting, our hyper-luminescent strategies illuminate your path to market dominance.
+      <section className="relative overflow-hidden px-6 pt-32 pb-16">
+        <div
+          className="pointer-events-none absolute inset-x-0 top-10 mx-auto h-64 w-[70vw] max-w-5xl rounded-full blur-3xl opacity-20"
+          style={{ background: "radial-gradient(circle, rgba(11,184,15,0.32) 0%, rgba(11,184,15,0.05) 45%, transparent 72%)" }}
+        />
+        <div className="relative mx-auto max-w-6xl">
+          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.35em] text-[#8fb495]">
+            Contact VND Media
           </p>
-        </div>
-      </section>
-
-      {/* ── CONTACT INFO CARDS ── */}
-      <section className="px-6 pb-20 max-w-5xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* Email */}
-          <div className="bg-[#141414] border border-white/5 rounded-2xl p-6 hover:border-[#0BB80F]/20 transition-all">
-            <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-4" style={{ background: "#0BB80F15", border: "1px solid #0BB80F30" }}>
-              <span className="text-sm" style={{ color: "#0BB80F" }}>✉</span>
-            </div>
-            <h3 className="font-bold italic text-base mb-3">Email</h3>
-            <p className="text-gray-400 text-xs mb-1">hello@acda.tech</p>
-            <p className="text-gray-400 text-xs">support@acda.tech</p>
-          </div>
-
-          {/* Phone */}
-          <div className="bg-[#141414] border border-white/5 rounded-2xl p-6 hover:border-[#0BB80F]/20 transition-all">
-            <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-4" style={{ background: "#0BB80F15", border: "1px solid #0BB80F30" }}>
-              <span className="text-sm" style={{ color: "#0BB80F" }}>📞</span>
-            </div>
-            <h3 className="font-bold italic text-base mb-3">Phone</h3>
-            <p className="text-gray-400 text-xs mb-1">+1 (555) 0123-4567</p>
-            <p className="text-gray-400 text-xs">+1 (555) 0123-8888</p>
-          </div>
-
-          {/* Location */}
-          <div className="bg-[#141414] border border-white/5 rounded-2xl p-6 hover:border-[#0BB80F]/20 transition-all">
-            <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-4" style={{ background: "#0BB80F15", border: "1px solid #0BB80F30" }}>
-              <span className="text-sm" style={{ color: "#0BB80F" }}>📍</span>
-            </div>
-            <h3 className="font-bold italic text-base mb-3">Location</h3>
-            <p className="text-gray-400 text-xs mb-1">42 Future Plaza, Neo-District</p>
-            <p className="text-gray-400 text-xs">The Hyper-Void, 10101</p>
-          </div>
-        </div>
-      </section>
-
-      {/* ── MANIFEST YOUR VISION + FORM ── */}
-      <section className="px-6 pb-20 max-w-5xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
-          {/* Left */}
-          <div>
-            <h2 className="text-3xl font-extrabold italic leading-snug mb-4">
-              Manifest Your<br />Vision.
-            </h2>
-            <p className="text-gray-400 text-sm leading-relaxed mb-8">
-              We don't just run ads; we engineer digital presence. Share your goals, and let's build something immortal.
-            </p>
-
-            {/* Map placeholder */}
-            <div className="rounded-2xl overflow-hidden h-44 bg-[#161616] border border-white/5 relative flex items-center justify-center mb-6">
-              <div className="absolute inset-0 opacity-20">
-                {[...Array(6)].map((_, i) => (
-                  <div key={i} className="absolute left-0 right-0 h-px bg-white/10" style={{ top: `${15 + i * 14}%` }} />
-                ))}
-                {[...Array(5)].map((_, i) => (
-                  <div key={i} className="absolute top-0 bottom-0 w-px bg-white/10" style={{ left: `${15 + i * 17}%` }} />
-                ))}
-              </div>
-              <div className="relative z-10 flex flex-col items-center">
-                <div className="w-8 h-8 rounded-full border-2 flex items-center justify-center mb-1" style={{ borderColor: "#0BB80F", background: "#00ff7f20" }}>
-                  <span className="text-xs" style={{ color: "#0BB80F" }}>📍</span>
-                </div>
-                <div className="w-0 h-0" style={{ borderLeft: "6px solid transparent", borderRight: "6px solid transparent", borderTop: "10px solid #0BB80F" }} />
-              </div>
-              <p className="absolute bottom-3 left-0 right-0 text-center text-xs text-gray-600 tracking-widest">ACDA HQ</p>
-            </div>
-
-            {/* Avatars */}
-            <div className="flex items-center gap-3">
-              <div className="flex -space-x-2">
-                {["MV", "EC", "DG"].map((init, i) => (
-                  <div key={i} className="w-8 h-8 rounded-full border-2 border-[#0a0a0a] bg-[#222] flex items-center justify-center text-xs font-bold text-gray-400">
-                    {init}
-                  </div>
-                ))}
-              </div>
-              <p className="text-gray-500 text-xs leading-tight">
-                Our digital architects are<br />ready to assist you.
+          <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
+            <div>
+              <h1 className="max-w-3xl text-5xl font-black italic leading-tight md:text-7xl">
+                Build the next bold move for your brand.
+              </h1>
+              <p className="mt-6 max-w-2xl text-sm leading-7 text-gray-400 md:text-base">
+                Reach out with your campaign, website, or growth goal. We&apos;ll turn the first message
+                into a clear conversation, practical next steps, and a team that actually follows through.
               </p>
             </div>
+
+            <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
+              {CONTACT_CARDS.map((card) => (
+                <div
+                  key={card.title}
+                  className="rounded-3xl border border-white/8 bg-white/[0.03] p-5 backdrop-blur-sm"
+                >
+                  <div
+                    className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-2xl border"
+                    style={{ borderColor: "rgba(11,184,15,0.18)", background: "rgba(11,184,15,0.12)", color: accent }}
+                  >
+                    {card.title.slice(0, 1)}
+                  </div>
+                  <h2 className="text-lg font-bold italic">{card.title}</h2>
+                  <div className="mt-3 space-y-1 text-sm text-gray-400">
+                    {card.lines.map((line) => (
+                      <p key={line}>{line}</p>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="px-6 pb-16">
+        <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="space-y-6 rounded-[30px] border border-white/8 bg-[#101010] p-7">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#8fb495]">
+                Direct Access
+              </p>
+              <h2 className="mt-3 text-3xl font-black italic leading-tight">
+                Manifest your vision.
+              </h2>
+              <p className="mt-4 text-sm leading-7 text-gray-400">
+                Tell us what you&apos;re building, where the bottleneck is, or what kind of growth you
+                want next. We&apos;ll help structure the path from idea to action.
+              </p>
+            </div>
+
+            <div className="overflow-hidden rounded-[26px] border border-white/8">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3923.599606217287!2d77.51627097765886!3d10.453312663058037!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba9df001a413735%3A0x61a1512da60dfa66!2sVND%20MEDIA%20Group!5e0!3m2!1sen!2sin!4v1774680338012!5m2!1sen!2sin"
+                className="h-64 w-full"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="VND Media location"
+              />
+            </div>
+
+            <div className="flex flex-wrap gap-3">
+              <a
+                href="https://wa.me/919363006565"
+                target="_blank"
+                rel="noreferrer"
+                className="rounded-full border border-white/10 px-5 py-3 text-sm font-semibold transition hover:border-[#0BB80F]/40"
+              >
+                WhatsApp Us
+              </a>
+              <a
+                href="tel:+919363006565"
+                className="rounded-full border border-white/10 px-5 py-3 text-sm font-semibold transition hover:border-[#0BB80F]/40"
+              >
+                Instant Call
+              </a>
+            </div>
           </div>
 
-          {/* Right: Form */}
-          <div className="bg-[#141414] border border-white/5 rounded-2xl p-6">
-
-            {/* ── SUCCESS STATE ── */}
+          <div className="rounded-[30px] border border-white/8 bg-[#121212] p-7 shadow-[0_24px_80px_rgba(0,0,0,0.35)]">
             {status === "success" ? (
-              <div className="flex flex-col items-center justify-center py-12 text-center gap-4">
-                <div className="w-14 h-14 rounded-full flex items-center justify-center text-2xl"
-                  style={{ background: "#0BB80F20", border: "1px solid #0BB80F40" }}>
-                  ✅
+              <div className="flex min-h-[520px] flex-col items-center justify-center text-center">
+                <div
+                  className="mb-5 flex h-16 w-16 items-center justify-center rounded-full border text-2xl"
+                  style={{ borderColor: "rgba(11,184,15,0.2)", background: "rgba(11,184,15,0.12)", color: accent }}
+                >
+                  ✓
                 </div>
-                <h3 className="text-lg font-bold italic">Message Sent!</h3>
-                <p className="text-gray-400 text-sm">We'll get back to you within 24 hours.</p>
+                <h3 className="text-2xl font-black italic">Inquiry sent successfully</h3>
+                <p className="mt-3 max-w-md text-sm leading-7 text-gray-400">
+                  Your message has been saved in our contact inbox. We&apos;ll get back to you soon with
+                  the next steps.
+                </p>
                 <button
+                  type="button"
                   onClick={() => setStatus("idle")}
-                  className="mt-2 text-xs underline text-gray-500 hover:text-white transition-colors"
+                  className="mt-6 rounded-full border border-white/10 px-5 py-3 text-sm font-semibold transition hover:border-[#0BB80F]/40"
                 >
                   Send another message
                 </button>
               </div>
             ) : (
-              <>
-                <div className="grid grid-cols-2 gap-4 mb-4">
-                  <div>
-                    <label className="text-xs text-gray-500 mb-1.5 block tracking-wider">NAME *</label>
-                    <input
-                      name="name" value={form.name} onChange={handleInput}
-                      placeholder="John Doe"
-                      className="w-full bg-[#0a0a0a] border border-white/10 rounded-lg px-3 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#0BB80F]/40 transition-colors"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-xs text-gray-500 mb-1.5 block tracking-wider">EMAIL *</label>
-                    <input
-                      name="email" value={form.email} onChange={handleInput}
-                      placeholder="john@example.com" type="email"
-                      className="w-full bg-[#0a0a0a] border border-white/10 rounded-lg px-3 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#0BB80F]/40 transition-colors"
-                    />
-                  </div>
+              <form onSubmit={handleSubmit}>
+                <div className="mb-8">
+                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#8fb495]">
+                    Project Inquiry
+                  </p>
+                  <h2 className="mt-3 text-3xl font-black italic">Start the conversation</h2>
+                  <p className="mt-3 max-w-xl text-sm leading-7 text-gray-400">
+                    Share the basics and we&apos;ll take it from there. The more context you give, the
+                    sharper our first response can be.
+                  </p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 mb-4">
-                  <div>
-                    <label className="text-xs text-gray-500 mb-1.5 block tracking-wider">PHONE</label>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <Field label="Name *">
                     <input
-                      name="phone" value={form.phone} onChange={handleInput}
-                      placeholder="+1..."
-                      className="w-full bg-[#0a0a0a] border border-white/10 rounded-lg px-3 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#0BB80F]/40 transition-colors"
+                      name="name"
+                      value={form.name}
+                      onChange={handleInput}
+                      placeholder="John Doe"
+                      className={inputClass}
                     />
-                  </div>
-                  <div>
-                    <label className="text-xs text-gray-500 mb-1.5 block tracking-wider">SERVICE</label>
+                  </Field>
+                  <Field label="Email *">
+                    <input
+                      type="email"
+                      name="email"
+                      value={form.email}
+                      onChange={handleInput}
+                      placeholder="john@example.com"
+                      className={inputClass}
+                    />
+                  </Field>
+                  <Field label="Phone">
+                    <input
+                      name="phone"
+                      value={form.phone}
+                      onChange={handleInput}
+                      placeholder="+91..."
+                      className={inputClass}
+                    />
+                  </Field>
+                  <Field label="Service">
                     <select
-                      name="service" value={form.service} onChange={handleInput}
-                      className="w-full bg-[#0a0a0a] border border-white/10 rounded-lg px-3 py-2.5 text-sm text-gray-300 focus:outline-none focus:border-[#0BB80F]/40 transition-colors appearance-none"
+                      name="service"
+                      value={form.service}
+                      onChange={handleInput}
+                      className={inputClass}
                     >
                       <option>Digital Marketing</option>
                       <option>Meta Ads</option>
                       <option>Google Ads</option>
                       <option>SEO Optimization</option>
-                      <option>Content Creation</option>
-                      <option>Lead Generation</option>
+                      <option>Website Development</option>
+                      <option>Branding & Creative</option>
                     </select>
-                  </div>
+                  </Field>
                 </div>
 
-                <div className="mb-4">
-                  <label className="text-xs text-gray-500 mb-1.5 block tracking-wider">MESSAGE *</label>
-                  <textarea
-                    name="message" value={form.message} onChange={handleInput}
-                    placeholder="Tell us about your project..." rows={4}
-                    className="w-full bg-[#0a0a0a] border border-white/10 rounded-lg px-3 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#0BB80F]/40 transition-colors resize-none"
-                  />
+                <div className="mt-4">
+                  <Field label="Message *">
+                    <textarea
+                      name="message"
+                      value={form.message}
+                      onChange={handleInput}
+                      rows={7}
+                      placeholder="Tell us about your project, target audience, budget range, timeline, or current challenge..."
+                      className={`${inputClass} resize-none`}
+                    />
+                  </Field>
                 </div>
 
-                {/* Error message */}
                 {status === "error" && (
-                  <p className="text-red-400 text-xs mb-3 px-1">{errorMsg}</p>
+                  <div className="mt-4 rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+                    {errorMsg}
+                  </div>
                 )}
 
-                <button
-                  onClick={handleSubmit}
-                  disabled={status === "loading"}
-                  className="w-full text-black font-bold text-sm py-3.5 rounded-xl tracking-widest hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                  style={{ background: "#0BB80F" }}
-                >
-                  {status === "loading" ? (
-                    <>
-                      <span className="inline-block w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
-                      SENDING...
-                    </>
-                  ) : "SEND INQUIRY"}
-                </button>
-              </>
+                <div className="mt-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                  <p className="max-w-md text-xs leading-6 text-gray-500">
+                    By sending this form, you&apos;re asking our team to contact you back about this
+                    inquiry.
+                  </p>
+                  <button
+                    type="submit"
+                    disabled={status === "loading"}
+                    className="inline-flex items-center justify-center rounded-full px-8 py-4 text-sm font-black tracking-[0.2em] text-black transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+                    style={{ background: accent }}
+                  >
+                    {status === "loading" ? "SENDING..." : "SEND INQUIRY"}
+                  </button>
+                </div>
+              </form>
             )}
           </div>
         </div>
-
-        {/* WhatsApp + Instant Call */}
-        <div className="flex flex-wrap justify-center gap-4 mt-12">
-          <button className="flex items-center gap-2 border border-white/10 rounded-full px-6 py-3 text-sm font-semibold hover:border-[#0BB80F]/40 transition-colors">
-            <span style={{ color: "#0BB80F" }}>💬</span> WhatsApp Us
-          </button>
-          <button className="flex items-center gap-2 border border-white/10 rounded-full px-6 py-3 text-sm font-semibold hover:border-[#0BB80F]/40 transition-colors">
-            <span style={{ color: "#0BB80F" }}>📲</span> Instant Call
-          </button>
-        </div>
       </section>
 
-      {/* ── FAQ ── */}
-      <section className="px-6 pb-24 max-w-2xl mx-auto text-center">
-        <h2 className="text-2xl font-extrabold italic mb-10">F.A.Q</h2>
-        <div className="space-y-3">
-          {FAQS.map((faq, i) => (
-            <div key={i} className="bg-[#141414] border border-white/5 rounded-xl overflow-hidden">
-              <button
-                onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                className="w-full flex items-center justify-between px-6 py-4 text-left hover:bg-white/2 transition-colors"
-              >
-                <span className="text-sm font-medium">{faq.q}</span>
-                <span className="text-lg text-gray-400 transition-transform" style={{ transform: openFaq === i ? "rotate(45deg)" : "none" }}>+</span>
-              </button>
-              {openFaq === i && (
-                <div className="px-6 pb-4">
-                  <p className="text-gray-400 text-sm leading-relaxed text-left">{faq.a}</p>
-                </div>
-              )}
+      <section className="px-6 pb-16">
+        <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[0.95fr_1.05fr]">
+          <div className="rounded-[30px] border border-white/8 bg-white/[0.02] p-7">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#8fb495]">Why reach us</p>
+            <h2 className="mt-3 text-3xl font-black italic">Clarity before complexity.</h2>
+            <div className="mt-6 space-y-4 text-sm leading-7 text-gray-400">
+              <p>We keep the first step simple: understand your goal, assess the current gap, and recommend the right execution path.</p>
+              <p>That could mean campaigns, design, website work, positioning, or a sharper funnel. The contact form is the entry point to that process.</p>
             </div>
-          ))}
+            <Link
+              to="/services"
+              className="mt-8 inline-flex rounded-full border border-white/10 px-5 py-3 text-sm font-semibold transition hover:border-[#0BB80F]/40"
+            >
+              Explore Services
+            </Link>
+          </div>
+
+          <div className="rounded-[30px] border border-white/8 bg-[#101010] p-7">
+            <h2 className="text-3xl font-black italic">F.A.Q</h2>
+            <div className="mt-6 space-y-3">
+              {FAQS.map((faq, index) => (
+                <div key={faq.q} className="overflow-hidden rounded-2xl border border-white/8 bg-white/[0.02]">
+                  <button
+                    type="button"
+                    onClick={() => setOpenFaq(openFaq === index ? null : index)}
+                    className="flex w-full items-center justify-between px-5 py-4 text-left"
+                  >
+                    <span className="pr-4 text-sm font-semibold">{faq.q}</span>
+                    <span className="text-xl text-gray-500">{openFaq === index ? "−" : "+"}</span>
+                  </button>
+                  {openFaq === index && (
+                    <div className="px-5 pb-5 text-sm leading-7 text-gray-400">{faq.a}</div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ── BOTTOM CTA ── */}
-      <section className="px-6 pb-24 max-w-3xl mx-auto text-center">
-        <h2 className="text-4xl md:text-5xl font-extrabold italic leading-tight mb-8">
-          Ready to Start Your<br />Project?
-        </h2>
-        <button className="text-black font-bold px-8 py-4 rounded-full text-sm tracking-widest hover:opacity-90 transition-opacity" style={{ background: "#0BB80F" }}>
-          LET'S TALK NOW
-        </button>
+      <section className="px-6 pb-24">
+        <div className="mx-auto max-w-5xl rounded-[36px] border border-white/8 bg-gradient-to-r from-[#111111] via-[#151515] to-[#0d0d0d] px-8 py-12 text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#8fb495]">Ready When You Are</p>
+          <h2 className="mt-4 text-4xl font-black italic leading-tight md:text-5xl">
+            Let&apos;s turn the next inquiry into measurable momentum.
+          </h2>
+          <div className="mt-8 flex flex-wrap justify-center gap-4">
+            <a
+              href="mailto:hello@vndmedia.agency"
+              className="rounded-full px-7 py-4 text-sm font-black tracking-[0.18em] text-black"
+              style={{ background: accent }}
+            >
+              EMAIL US
+            </a>
+            <Link
+              to="/"
+              className="rounded-full border border-white/10 px-7 py-4 text-sm font-bold transition hover:border-[#0BB80F]/40"
+            >
+              BACK TO HOME
+            </Link>
+          </div>
+        </div>
       </section>
 
       <Footer />
     </div>
   );
 }
+
+function Field({ label, children }) {
+  return (
+    <label className="block">
+      <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
+        {label}
+      </span>
+      {children}
+    </label>
+  );
+}
+
+const inputClass =
+  "w-full rounded-2xl border border-white/10 bg-[#090909] px-4 py-3.5 text-sm text-white outline-none transition placeholder:text-gray-600 focus:border-[#0BB80F]/40";

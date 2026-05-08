@@ -15,6 +15,7 @@ const Header = () => {
   <img src={logo} alt="VND Media Logo" className="logo-img" />
 </div>
       <div className="nav-links">
+      <Link to="/">Home</Link>
         
          <Link to="/services">Services</Link>
         
@@ -24,7 +25,7 @@ const Header = () => {
         <Link to="/Careers">Careers</Link>
          
       </div>
-      <button className="nav-cta">Start Your Project</button>
+      <Link to="/contact" className="nav-cta">Start Your Project</Link>
     </nav>
   );
 };

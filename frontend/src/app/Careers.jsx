@@ -149,7 +149,7 @@ export default function Careers() {
   };
 
   return (
-    <div style={{ fontFamily: "'Helvetica Neue', Arial, sans-serif" }} className="bg-[#0a0a0a] text-white min-h-screen">
+    <div className="bg-[#0a0a0a] text-white min-h-screen">
       <Header />
 
       {/* ── HERO ── */}

@@ -182,7 +182,7 @@ export default function AdminCareers() {
   // ─────────────────────────────────────────────────────────────────────────
 
   return (
-    <div style={{ fontFamily: "'Helvetica Neue', Arial, sans-serif" }} className="min-h-screen bg-[#0a0a0a] text-white">
+    <div className="min-h-screen bg-[#0a0a0a] text-white">
 
       {/* ── Toast ── */}
       {toast && (

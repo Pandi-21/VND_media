@@ -12,18 +12,43 @@ const {
 // POST /api/contact
 router.post("/", async (req, res) => {
   try {
-    const { name, email, phone, subject, message } = req.body;
+    const {
+      name = "",
+      email = "",
+      phone = "",
+      subject = "",
+      service = "",
+      message = "",
+    } = req.body;
 
-    if (!name || !email || !subject || !message) {
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim().toLowerCase();
+    const trimmedPhone = phone.trim();
+    const trimmedSubject = (subject || service || "General Inquiry").trim();
+    const trimmedMessage = message.trim();
+
+    if (!trimmedName || !trimmedEmail || !trimmedSubject || !trimmedMessage) {
       return res.status(400).json({ success: false, message: "Please fill all required fields." });
     }
 
-    const submission = await Contact.create({ name, email, phone, subject, message });
+    const submission = await Contact.create({
+      name: trimmedName,
+      email: trimmedEmail,
+      phone: trimmedPhone,
+      subject: trimmedSubject,
+      message: trimmedMessage,
+    });
 
     // Send emails (non-blocking — won't fail the response if email fails)
     Promise.allSettled([
-      sendContactConfirmationToUser({ name, email, subject }),
-      sendContactNotificationToAdmin({ name, email, phone, subject, message }),
+      sendContactConfirmationToUser({ name: trimmedName, email: trimmedEmail, subject: trimmedSubject }),
+      sendContactNotificationToAdmin({
+        name: trimmedName,
+        email: trimmedEmail,
+        phone: trimmedPhone,
+        subject: trimmedSubject,
+        message: trimmedMessage,
+      }),
     ]);
 
     res.status(201).json({
@@ -74,9 +99,15 @@ router.get("/admin/:id", protect, async (req, res) => {
 router.patch("/admin/:id", protect, async (req, res) => {
   try {
     const { isRead, isReplied, adminNotes } = req.body;
+    const updates = {};
+
+    if (typeof isRead === "boolean") updates.isRead = isRead;
+    if (typeof isReplied === "boolean") updates.isReplied = isReplied;
+    if (typeof adminNotes === "string") updates.adminNotes = adminNotes;
+
     const submission = await Contact.findByIdAndUpdate(
       req.params.id,
-      { isRead, isReplied, adminNotes },
+      updates,
       { new: true }
     );
     if (!submission) return res.status(404).json({ success: false, message: "Submission not found." });

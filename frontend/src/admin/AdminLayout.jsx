@@ -1,35 +1,46 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 
 export default function AdminLayout() {
+  const location = useLocation();
   const navigate = useNavigate();
+
+  const menu = [
+    { name: "Careers", path: "/admin/careers" },
+    { name: "Blog", path: "/admin/blog" },
+    { name: "Contact", path: "/admin/contact" },
+    { name: "Services", path: "/admin/services" },
+    { name: "About", path: "/admin/about" },
+  ];
+
+  function handleLogout() {
+    localStorage.removeItem("vnd_admin_token");
+    navigate("/admin/login");
+  }
 
   return (
     <div className="flex min-h-screen bg-black text-white">
-      
-      {/* Sidebar */}
-      <div className="w-64 bg-[#0f0f0f] border-r border-white/10 p-6">
+      <div className="w-64 bg-[#0f0f0f] border-r border-white/10 p-6 flex flex-col">
         <h2 className="text-lg font-bold mb-8 text-green-400">ADMIN PANEL</h2>
-
-        <div className="space-y-4">
-          <button onClick={() => navigate("/admin/careers")} className="block w-full text-left hover:text-green-400">
-            Careers
-          </button>
-
-          <button onClick={() => navigate("/admin/blog")} className="block w-full text-left hover:text-green-400">
-            Blog
-          </button>
-
-          <button onClick={() => navigate("/admin/contact")} className="block w-full text-left hover:text-green-400">
-            Contact
-          </button>
-
-          <button onClick={() => navigate("/admin/services")} className="block w-full text-left hover:text-green-400">
-            Services
-          </button>
+        <div className="space-y-4 flex-1">
+          {menu.map((item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={`block ${
+                location.pathname === item.path ? "text-green-400" : "text-white"
+              } hover:text-green-400`}
+            >
+              {item.name}
+            </Link>
+          ))}
         </div>
+        <button
+          onClick={handleLogout}
+          className="text-sm text-gray-500 hover:text-red-400 text-left mt-8"
+        >
+          Logout
+        </button>
       </div>
-
-      {/* Content */}
       <div className="flex-1 p-8">
         <Outlet />
       </div>

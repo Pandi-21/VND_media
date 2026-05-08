@@ -120,7 +120,7 @@ function ServiceRow({ s }) {
         <div style={{ flex: "1", minWidth: "260px", maxWidth: "420px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
             <div style={{ color: "#0BB80F" }}>{s.icon}</div>
-            <span style={{ color: "#0BB80F", fontFamily: "monospace", fontSize: "11px", opacity: 0.45 }}>{s.num}</span>
+            <span style={{ color: "#0BB80F", fontSize: "11px", opacity: 0.45 }}>{s.num}</span>
           </div>
           <h3 style={{ fontSize: "26px", fontWeight: "900", fontStyle: "italic", letterSpacing: "-0.5px", marginBottom: "12px" }}>
             {s.title}
@@ -182,7 +182,7 @@ function ServiceRow({ s }) {
             background: "rgba(11,184,15,0.08)",
             border: "1px solid rgba(11,184,15,0.18)",
             borderRadius: "8px", padding: "4px 10px",
-            fontSize: "10px", color: "#0BB80F", fontFamily: "monospace",
+            fontSize: "10px", color: "#0BB80F",
           }}>{s.num}</div>
           <div style={{
             position: "absolute", bottom: "16px", left: "16px",
@@ -231,7 +231,7 @@ export default function Services() {
   useEffect(() => { setTimeout(() => setHeroVisible(true), 80); }, []);
 
   return (
-    <div style={{ fontFamily: "'Georgia',serif", background: "#0d0d0d", color: "#fff", minHeight: "100vh" }}>
+    <div style={{ background: "#0d0d0d", color: "#fff", minHeight: "100vh" }}>
 
       {/* NAV */}
        <Header/>
@@ -240,7 +240,7 @@ export default function Services() {
       <section style={{ paddingTop: "150px", paddingBottom: "90px", textAlign: "center", padding: "165px 24px 90px" }}>
         <div style={{
           fontSize: "10px", letterSpacing: "3px", color: "#0BB80F", marginBottom: "16px",
-          fontFamily: "monospace", opacity: heroVisible ? 1 : 0, transition: "opacity 0.6s 0.1s",
+          opacity: heroVisible ? 1 : 0, transition: "opacity 0.6s 0.1s",
         }}>OUR CAPABILITIES</div>
         <h1 style={{
           fontSize: "clamp(44px,8vw,88px)", fontWeight: "900", fontStyle: "italic",

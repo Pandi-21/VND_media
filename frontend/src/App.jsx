@@ -11,6 +11,8 @@ import AdminLayout from "./admin/AdminLayout";
 import AdminBlog from "./admin/AdminBlog";
 import AdminContact from "./admin/AdminContact";
 import AdminServices from "./admin/AdminServices";
+import AdminAbout from "./admin/AdminAbout";
+import "./styles/main.css";
  
 import ProtectedRoute from "./Auth/ProtectedRoute";
 
@@ -19,25 +21,37 @@ function App() {
   <BrowserRouter>
   <Routes>
 
-    {/* Public pages */}
-    <Route path="/" element={<Home />} />
-    <Route path="/services" element={<Services />} />
-    <Route path="/aboutus" element={<Aboutus />} />
-    <Route path="/blog" element={<Blog />} />
-    <Route path="/contact" element={<Contact />} />
-    <Route path="/careers" element={<Careers />} />
+  {/* Public */}
+  <Route path="/" element={<Home />} />
+  <Route path="/services" element={<Services />} />
+  <Route path="/aboutus" element={<Aboutus />} />
+  <Route path="/blog" element={<Blog />} />
+  <Route path="/contact" element={<Contact />} />
+  <Route path="/careers" element={<Careers />} />
 
-    {/* Admin login */}
-    <Route path="/admin/login" element={<AdminLogin />} />
+  {/* ✅ Admin Login (separate) */}
+ {/* Admin Login - admin/* க்கு முன்னாடி வரணும் */}
+<Route path="/admin/login" element={<AdminLogin />} />
 
-    {/* Protected admin page */}
-<Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
+{/* Protected Admin */}
+<Route
+  path="/admin"
+  element={
+    <ProtectedRoute>
+      <AdminLayout />
+    </ProtectedRoute>
+  }
+>
+ <Route index element={<div>Welcome Admin</div>} />
   <Route path="careers" element={<AdminCareers />} />
   <Route path="blog" element={<AdminBlog />} />
   <Route path="contact" element={<AdminContact />} />
   <Route path="services" element={<AdminServices />} />
+  <Route path="about" element={<AdminAbout />} />
+
 </Route>
-  </Routes>
+
+</Routes>
 </BrowserRouter>
   );
 }
