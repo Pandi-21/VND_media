@@ -122,13 +122,13 @@ function ServiceRow({ s }) {
             <div style={{ color: "#0BB80F" }}>{s.icon}</div>
             <span style={{ color: "#0BB80F", fontSize: "11px", opacity: 0.45 }}>{s.num}</span>
           </div>
-          <h3 style={{ fontSize: "26px", fontWeight: "900", fontStyle: "italic", letterSpacing: "-0.5px", marginBottom: "12px" }}>
+          <h3 style={{ fontSize: "28px", fontWeight: "800", letterSpacing: "-0.2px", lineHeight: 1.2, marginBottom: "12px" }}>
             {s.title}
           </h3>
-          <p style={{ color: "#777", fontSize: "14px", lineHeight: "1.75", marginBottom: "20px" }}>{s.desc}</p>
+          <p style={{ color: "#9ca3af", fontSize: "15px", lineHeight: "1.75", marginBottom: "20px" }}>{s.desc}</p>
           <ul style={{ listStyle: "none", padding: 0, margin: "0 0 24px", display: "flex", flexDirection: "column", gap: "8px" }}>
             {s.points.map((p) => (
-              <li key={p} style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13px", color: "#bbb" }}>
+              <li key={p} style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13.5px", color: "#d1d5db", lineHeight: 1.5 }}>
                 <span style={{ color: "#0BB80F", fontSize: "9px" }}>●</span> {p}
               </li>
             ))}
@@ -140,10 +140,10 @@ function ServiceRow({ s }) {
               color: "#0BB80F",
               padding: "8px 22px",
               borderRadius: "999px",
-              fontSize: "12px",
+              fontSize: "13px",
               cursor: "pointer",
               fontWeight: "700",
-              letterSpacing: "0.4px",
+              letterSpacing: "0.1px",
               transition: "all 0.25s",
             }}
             onMouseEnter={e => { e.target.style.background = "#0BB80F"; e.target.style.color = "#000"; }}
@@ -210,8 +210,8 @@ function FrameworkStep({ f }) {
     }}>
       <RevealBlock from={isLeft ? "left" : "right"} delay={0}>
         <div style={{ flex: 1, textAlign: isLeft ? "right" : "left" }}>
-          <h3 style={{ color: "#0BB80F", fontWeight: "900", fontSize: "17px", fontStyle: "italic", marginBottom: "6px" }}>{f.title}</h3>
-          <p style={{ color: "#666", fontSize: "13px", lineHeight: "1.7", maxWidth: "280px", marginLeft: isLeft ? "auto" : 0 }}>{f.desc}</p>
+          <h3 style={{ color: "#0BB80F", fontWeight: "800", fontSize: "18px", lineHeight: 1.25, marginBottom: "6px" }}>{f.title}</h3>
+          <p style={{ color: "#9ca3af", fontSize: "13.5px", lineHeight: "1.7", maxWidth: "280px", marginLeft: isLeft ? "auto" : 0 }}>{f.desc}</p>
         </div>
       </RevealBlock>
       <div style={{
@@ -231,7 +231,7 @@ export default function Services() {
   useEffect(() => { setTimeout(() => setHeroVisible(true), 80); }, []);
 
   return (
-    <div style={{ background: "#0d0d0d", color: "#fff", minHeight: "100vh" }}>
+    <div className="font-body" style={{ background: "#0d0d0d", color: "#fff", minHeight: "100vh" }}>
 
       {/* NAV */}
        <Header/>
@@ -243,8 +243,8 @@ export default function Services() {
           opacity: heroVisible ? 1 : 0, transition: "opacity 0.6s 0.1s",
         }}>OUR CAPABILITIES</div>
         <h1 style={{
-          fontSize: "clamp(44px,8vw,88px)", fontWeight: "900", fontStyle: "italic",
-          letterSpacing: "-2px", lineHeight: 1.05, marginBottom: "24px",
+          fontSize: "clamp(44px,8vw,84px)", fontWeight: "800",
+          letterSpacing: "-0.8px", lineHeight: 1.05, marginBottom: "24px",
           opacity: heroVisible ? 1 : 0,
           transform: heroVisible ? "translateY(0)" : "translateY(36px)",
           transition: "opacity 0.9s 0.2s, transform 0.9s 0.2s",
@@ -252,7 +252,7 @@ export default function Services() {
           Our <span style={{ color: "#0BB80F" }}>Services</span>
         </h1>
         <p style={{
-          color: "#666", fontSize: "15px", maxWidth: "420px", margin: "0 auto 40px", lineHeight: 1.8,
+          color: "#9ca3af", fontSize: "16px", maxWidth: "520px", margin: "0 auto 40px", lineHeight: 1.75,
           opacity: heroVisible ? 1 : 0,
           transform: heroVisible ? "translateY(0)" : "translateY(20px)",
           transition: "opacity 0.9s 0.35s, transform 0.9s 0.35s",
@@ -265,8 +265,8 @@ export default function Services() {
       style={{
         background: "#0BB80F",
         color: "#000",
-        fontWeight: "900",
-        fontSize: "13px",
+        fontWeight: "800",
+        fontSize: "14px",
         padding: "14px 34px",
         borderRadius: "999px",
         border: "none",
@@ -287,7 +287,7 @@ export default function Services() {
       {/* WHY WE WIN */}
       <section style={{ maxWidth: "880px", margin: "0 auto", padding: "0 32px 100px", textAlign: "center" }}>
         <RevealBlock from="left">
-          <h2 style={{ fontSize: "38px", fontWeight: "900", fontStyle: "italic", letterSpacing: "-1px", marginBottom: "52px" }}>
+          <h2 style={{ fontSize: "38px", fontWeight: "800", letterSpacing: "-0.3px", lineHeight: 1.2, marginBottom: "52px" }}>
             Why We <span style={{ color: "#0BB80F" }}>Win</span>
           </h2>
         </RevealBlock>
@@ -302,8 +302,8 @@ export default function Services() {
                 onMouseLeave={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.05)"}
               >
                 <div style={{ fontSize: "28px", marginBottom: "14px" }}>{p.icon}</div>
-                <h4 style={{ fontWeight: "900", fontSize: "15px", marginBottom: "8px" }}>{p.title}</h4>
-                <p style={{ color: "#666", fontSize: "13px", lineHeight: "1.65" }}>{p.desc}</p>
+                <h4 style={{ fontWeight: "800", fontSize: "16px", lineHeight: 1.3, marginBottom: "8px" }}>{p.title}</h4>
+                <p style={{ color: "#9ca3af", fontSize: "13.5px", lineHeight: "1.7" }}>{p.desc}</p>
               </div>
             </RevealBlock>
           ))}
@@ -314,10 +314,10 @@ export default function Services() {
       <section style={{ maxWidth: "680px", margin: "0 auto", padding: "0 32px 100px" }}>
         <RevealBlock from="left">
           <div style={{ textAlign: "center", marginBottom: "56px" }}>
-            <h2 style={{ fontSize: "38px", fontWeight: "900", fontStyle: "italic", letterSpacing: "-1px" }}>
+            <h2 style={{ fontSize: "38px", fontWeight: "800", letterSpacing: "-0.3px", lineHeight: 1.2 }}>
               The <span style={{ color: "#0BB80F" }}>Process</span>
             </h2>
-            <p style={{ color: "#555", fontSize: "13px", marginTop: "10px" }}>
+            <p style={{ color: "#9ca3af", fontSize: "14px", lineHeight: 1.7, marginTop: "10px" }}>
               Stop guessing. Start scaling with the agency that treats your growth as our primary mission.
             </p>
           </div>

@@ -703,10 +703,7 @@ export default function Aboutus() {
   }, []);
 
   return (
-    <div
-      style={{ fontFamily: "'Helvetica Neue', Arial, sans-serif" }}
-      className="bg-[#0d0d0d] text-white min-h-screen"
-    >
+    <div className="bg-[#0d0d0d] text-white min-h-screen font-body">
       <Header />
       <Hero />
       <WhoWeAre />
