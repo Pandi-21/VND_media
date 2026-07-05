@@ -16,7 +16,8 @@ import {
   adminAboutAPI,
   adminCompatAPI,
   adminProjectAPI,
-  adminReviewAPI
+  adminReviewAPI,
+  adminPackageAPI
 } from "./adminapi";
 
 // Re-export authAPI directly since it is fully admin-specific
@@ -115,4 +116,12 @@ export const reviewAPI = {
   getAll: () => request("GET", "/reviews"),
   // Admin
   ...adminReviewAPI,
+};
+
+// ─── Package ──────────────────────────────────────────────────────────────────
+export const packageAPI = {
+  // Public
+  getAll: () => request("GET", "/packages"),
+  // Admin
+  ...adminPackageAPI,
 };

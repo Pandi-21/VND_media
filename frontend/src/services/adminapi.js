@@ -82,3 +82,11 @@ export const adminReviewAPI = {
   update:      (id, formData) => request("PUT",    `/reviews/${id}`, formData, true),
   delete:      (id)           => request("DELETE", `/reviews/${id}`),
 };
+
+// ─── Package Admin ─────────────────────────────────────────────────────────────
+export const adminPackageAPI = {
+  adminGetAll: ()           => request("GET",    "/packages/admin/all"),
+  create:      (body)       => request("POST",   "/packages/admin", body),
+  update:      (id, body)   => request("PUT",    `/packages/admin/${id}`, body),
+  delete:      (id)         => request("DELETE", `/packages/admin/${id}`),
+};

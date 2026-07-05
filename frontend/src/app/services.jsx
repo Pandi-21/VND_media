@@ -3,6 +3,34 @@ import { Rocket, Facebook, Search, Video, TrendingUp, BarChart2 } from "lucide-r
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import { Link, useNavigate } from "react-router-dom";
+import { servicesAPI, packageAPI } from "../services/api";
+
+const getIconComponent = (iconName) => {
+  switch (iconName?.toLowerCase()) {
+    case "rocket":
+      return <Rocket size={32} />;
+    case "facebook":
+    case "meta":
+      return <Facebook size={32} />;
+    case "search":
+    case "google":
+      return <Search size={32} />;
+    case "video":
+    case "content":
+      return <Video size={32} />;
+    case "trendingup":
+    case "trending-up":
+    case "web":
+    case "dev":
+      return <TrendingUp size={32} />;
+    case "barchart2":
+    case "bar-chart-2":
+    case "seo":
+      return <BarChart2 size={32} />;
+    default:
+      return <Rocket size={32} />;
+  }
+};
 
 const NAV_LINKS = ["Services", "Work", "About", "FAQ"];
 
@@ -217,9 +245,66 @@ function FrameworkStep({ f, i }) {
   );
 }
 
+const DEFAULT_PACKAGES = [
+  {
+    _id: "p1",
+    name: "Silver Package",
+    price: "₹24,999/mo",
+    description: "Perfect for growing brands looking to establish search and social presence.",
+    features: ["2 Meta Ad Campaigns", "Weekly Performance Reports", "Basic Competitor Tracking", "Dedicated Account Manager"],
+    badge: "",
+  },
+  {
+    _id: "p2",
+    name: "Gold Package",
+    price: "₹49,999/mo",
+    description: "Designed for scaling brands requiring multi-funnel digital dominance.",
+    features: ["5 Meta Ad Campaigns", "Google Ads Setup & Search SEM", "Bi-weekly consulting calls", "Custom Conversion tracking integrations", "Creative asset optimization advisory"],
+    badge: "Most Popular",
+  },
+  {
+    _id: "p3",
+    name: "Platinum Combo",
+    price: "₹89,999/mo",
+    description: "Ultimate enterprise growth engine with complete visual & performance tech takeover.",
+    features: ["Unlimited Meta & Google ad campaigns", "Priority creative team & copy assets", "Full-stack website conversion tuning", "Direct CEO Slack channel support", "Competitor takeover target strategies"],
+    badge: "Best Value",
+  }
+];
+
 export default function Services() {
+  const navigate = useNavigate();
   const [heroVisible, setHeroVisible] = useState(false);
-  useEffect(() => { setTimeout(() => setHeroVisible(true), 80); }, []);
+  const [dbServices, setDbServices] = useState([]);
+  const [dbPackages, setDbPackages] = useState([]);
+
+  useEffect(() => {
+    setTimeout(() => setHeroVisible(true), 80);
+
+    servicesAPI.getAll()
+      .then((data) => {
+        if (data && data.success && data.services && data.services.length > 0) {
+          const mapped = data.services.map((s, index) => ({
+            num: String(index + 1).padStart(2, "0"),
+            icon: getIconComponent(s.icon),
+            title: s.title,
+            desc: s.description,
+            points: s.features || [],
+            side: index % 2 === 0 ? "left" : "right",
+          }));
+          setDbServices(mapped);
+        }
+      })
+      .catch((err) => console.error("Failed to load services:", err));
+
+    packageAPI.getAll()
+      .then((data) => {
+        if (data && data.success && data.packages && data.packages.length > 0) {
+          setDbPackages(data.packages);
+        }
+      })
+      .catch((err) => console.error("Failed to load packages:", err));
+  }, []);
 
   return (
     <div className="font-body" style={{ background: "#0d0d0d", color: "#fff", minHeight: "100vh" }}>
@@ -272,7 +357,142 @@ export default function Services() {
 
       {/* SERVICES */}
       <section style={{ maxWidth: "960px", margin: "0 auto", padding: "0 32px 60px" }}>
-        {SERVICES.map((s) => <ServiceRow key={s.num} s={s} />)}
+        {(dbServices.length > 0 ? dbServices : SERVICES).map((s) => <ServiceRow key={s.num} s={s} />)}
+      </section>
+
+      {/* PRICING & PACKAGES */}
+      <section style={{ maxWidth: "960px", margin: "0 auto", padding: "40px 32px 100px", textAlign: "center" }}>
+        <RevealBlock from="left">
+          <div style={{ fontSize: "10px", letterSpacing: "3px", color: "#0BB80F", marginBottom: "16px" }}>
+            SELECT A PLAN
+          </div>
+          <h2 style={{ fontSize: "38px", fontWeight: "800", letterSpacing: "-0.3px", lineHeight: 1.2, marginBottom: "20px" }}>
+            Pricing <span style={{ color: "#0BB80F" }}>Packages</span>
+          </h2>
+          <p style={{ color: "#9ca3af", fontSize: "14px", maxWidth: "520px", margin: "0 auto 50px", lineHeight: 1.7 }}>
+            Choose a plan that fits your growth targets. From single-channel setups to complete digital takeovers.
+          </p>
+        </RevealBlock>
+
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+          gap: "32px",
+          marginTop: "20px"
+        }}>
+          {(dbPackages.length > 0 ? dbPackages : DEFAULT_PACKAGES).map((pkg, i) => {
+            const isPopular = pkg.badge?.toLowerCase() === "most popular" || i === 1;
+            return (
+              <RevealBlock key={pkg._id || i} from={i % 2 === 0 ? "left" : "right"} delay={i * 120}>
+                <div style={{
+                  background: "#111",
+                  border: isPopular ? "1px solid #0BB80F" : "1px solid rgba(255, 255, 255, 0.05)",
+                  borderRadius: "24px",
+                  padding: "36px 28px",
+                  textAlign: "left",
+                  position: "relative",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  height: "100%",
+                  transition: "all 0.3s ease",
+                  boxShadow: isPopular ? "0 10px 30px -10px rgba(11, 184, 15, 0.15)" : "none",
+                }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.transform = "translateY(-6px)";
+                    if (isPopular) {
+                      e.currentTarget.style.boxShadow = "0 15px 40px -10px rgba(11, 184, 15, 0.3)";
+                    } else {
+                      e.currentTarget.style.borderColor = "rgba(11,184,15,0.25)";
+                    }
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.transform = "translateY(0)";
+                    if (isPopular) {
+                      e.currentTarget.style.boxShadow = "0 10px 30px -10px rgba(11, 184, 15, 0.15)";
+                    } else {
+                      e.currentTarget.style.borderColor = "rgba(255,255,255,0.05)";
+                    }
+                  }}
+                >
+                  {/* Badge */}
+                  {pkg.badge && (
+                    <span style={{
+                      position: "absolute",
+                      top: "20px",
+                      right: "20px",
+                      background: "#0BB80F",
+                      color: "#000",
+                      fontSize: "9px",
+                      fontWeight: "900",
+                      textTransform: "uppercase",
+                      padding: "4px 10px",
+                      borderRadius: "999px",
+                      letterSpacing: "0.5px"
+                    }}>
+                      {pkg.badge}
+                    </span>
+                  )}
+
+                  {/* Header info */}
+                  <div>
+                    <h3 style={{ fontSize: "20px", fontWeight: "800", color: "#fff", marginBottom: "8px" }}>
+                      {pkg.name}
+                    </h3>
+                    <p style={{ color: "#888", fontSize: "12.5px", lineHeight: "1.5", marginBottom: "24px", minHeight: "38px" }}>
+                      {pkg.description}
+                    </p>
+                    <div style={{ display: "flex", alignItems: "baseline", marginBottom: "28px" }}>
+                      <span style={{ fontSize: "36px", fontWeight: "900", color: "#0BB80F" }}>{pkg.price}</span>
+                    </div>
+
+                    {/* Features checklist */}
+                    <div style={{ borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: "24px", marginBottom: "32px" }}>
+                      <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "12px" }}>
+                        {(pkg.features || []).map((feat, idx) => (
+                          <li key={idx} style={{ display: "flex", alignItems: "start", gap: "10px", fontSize: "13.5px", color: "#ccc", lineHeight: "1.4" }}>
+                            <span style={{ color: "#0BB80F", fontWeight: "bold" }}>✓</span>
+                            <span>{feat}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* CTA button */}
+                  <div style={{ marginTop: "auto" }}>
+                    <button
+                      onClick={() => navigate("/contact", { state: { selectedPackage: pkg.name } })}
+                      style={{
+                        width: "100%",
+                        background: isPopular ? "#0BB80F" : "transparent",
+                        border: "1px solid #0BB80F",
+                        color: isPopular ? "#000" : "#0BB80F",
+                        padding: "12px 24px",
+                        borderRadius: "999px",
+                        fontSize: "13px",
+                        fontWeight: "800",
+                        cursor: "pointer",
+                        letterSpacing: "0.2px",
+                        transition: "all 0.25s",
+                      }}
+                      onMouseEnter={e => {
+                        e.target.style.background = "#0BB80F";
+                        e.target.style.color = "#000";
+                      }}
+                      onMouseLeave={e => {
+                        e.target.style.background = isPopular ? "#0BB80F" : "transparent";
+                        e.target.style.color = isPopular ? "#000" : "#0BB80F";
+                      }}
+                    >
+                      Select Plan
+                    </button>
+                  </div>
+                </div>
+              </RevealBlock>
+            );
+          })}
+        </div>
       </section>
 
       {/* WHY WE WIN */}

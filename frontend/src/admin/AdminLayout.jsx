@@ -11,6 +11,7 @@ export default function AdminLayout() {
     { name: "Portfolio", path: "/admin/portfolio" },
     { name: "Services", path: "/admin/services" },
     { name: "About", path: "/admin/about" },
+    { name: "Packages", path: "/admin/packages" },
   ];
 
   function handleLogout() {

@@ -138,6 +138,11 @@ export default function AdminContact() {
         current.map((item) => (item._id === data.submission._id ? data.submission : item))
       );
       showToast("success", "Submission updated.");
+      
+      // Reset detail selection and editor panel
+      setSelectedId("");
+      setSelectedSubmission(null);
+      setEditor(emptyEditor);
     } catch (error) {
       showToast("error", error.message || "Failed to update submission.");
     } finally {

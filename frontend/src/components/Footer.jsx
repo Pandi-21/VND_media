@@ -7,12 +7,12 @@ const Footer = () => {
     <footer>
       <div className="footer">
         <div className="footer-brand">
-          <div className="nav-logo" style={{ cursor: "default" }}>
-            <img src={logo} alt="VND Media Logo" style={{ height: "120px", width: "auto", objectFit: "contain" }} />
-          </div>
+          <Link to="/" style={{ display: "inline-block", marginBottom: "10px" }}>
+            <img src={logo} alt="VND Media Logo" style={{ height: "80px", width: "auto", objectFit: "contain", display: "block" }} />
+          </Link>
           <p>Powering digital growth for ambitious brands worldwide.</p>
         </div>
-        
+
         <div className="footer-col">
           <h4>Services</h4>
           <Link to="/services">Performance Marketing</Link>
@@ -20,7 +20,7 @@ const Footer = () => {
           <Link to="/services">Visual Identity</Link>
           <Link to="/services">Consulting</Link>
         </div>
-        
+
         <div className="footer-col">
           <h4>Company</h4>
           <Link to="/Aboutus">About Us</Link>
@@ -28,7 +28,7 @@ const Footer = () => {
           <Link to="/Careers">Careers</Link>
           <Link to="/Blog">Blog</Link>
         </div>
-        
+
         <div className="footer-col">
           <h4>Legal</h4>
           <Link to="/privacy-policy">Privacy Policy</Link>
@@ -36,7 +36,7 @@ const Footer = () => {
           <Link to="/cookie-policy">Cookie Policy</Link>
         </div>
       </div>
-      
+
       <div className="footer-bottom">
         <span>© 2025 VND Media. All rights reserved.</span>
         <div className="social-links">

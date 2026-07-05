@@ -82,6 +82,12 @@ export default function Contact() {
     if (location.state?.selectedService) {
       setForm((f) => ({ ...f, service: location.state.selectedService }));
     }
+    if (location.state?.selectedPackage) {
+      setForm((f) => ({
+        ...f,
+        message: `Hi, I am interested in signing up for the ${location.state.selectedPackage}. Please contact me to discuss the details.`,
+      }));
+    }
   }, [location.state]);
 
   const handleInput = (e) => {
