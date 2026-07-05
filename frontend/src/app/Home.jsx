@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { FiTrendingUp,FiCode ,FiPenTool  } from "react-icons/fi";
+import { FiTrendingUp, FiCode, FiPenTool } from "react-icons/fi";
 import { motion } from "framer-motion";
-import { contactAPI } from '../services/api';
+import { contactAPI, projectAPI, resolveAssetUrl, reviewAPI } from '../services/api';
 
 const useCountUp = (end, duration = 2500) => {
   const [count, setCount] = useState(0);
@@ -42,17 +42,17 @@ const StatItem = ({ num, suffix, label }) => {
 };
 
 const faqs = [
-  { 
-    q: "What is the typical development timeline?", 
-    a: "Most projects take 4–12 weeks depending on scope. We prioritize quality while ensuring swift delivery within agreed timelines." 
+  {
+    q: "What is the typical development timeline?",
+    a: "Most projects take 4–12 weeks depending on scope. We prioritize quality while ensuring swift delivery within agreed timelines."
   },
-  { 
-    q: "Do you offer performance marketing consulting?", 
-    a: "Yes, our performance marketing experts provide end-to-end campaign strategy, setup, optimization, and reporting across all major platforms." 
+  {
+    q: "Do you offer performance marketing consulting?",
+    a: "Yes, our performance marketing experts provide end-to-end campaign strategy, setup, optimization, and reporting across all major platforms."
   },
-  { 
-    q: "How do you approach long-term marketing?", 
-    a: "We build sustainable growth strategies combining organic reach, paid media, content, and brand development for compounding results over time." 
+  {
+    q: "How do you approach long-term marketing?",
+    a: "We build sustainable growth strategies combining organic reach, paid media, content, and brand development for compounding results over time."
   },
 ];
 const services = [
@@ -76,6 +76,8 @@ const services = [
 const Home = () => {
   const navigate = useNavigate();
   const [openFaq, setOpenFaq] = useState(null);
+  const [projects, setProjects] = useState([]);
+  const [reviews, setReviews] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -83,6 +85,24 @@ const Home = () => {
     service: "Performance Marketing",
     message: "",
   });
+
+  useEffect(() => {
+    projectAPI.getAll()
+      .then((data) => {
+        if (data && data.success && data.projects) {
+          setProjects(data.projects);
+        }
+      })
+      .catch((err) => console.error("Failed to load projects:", err));
+
+    reviewAPI.getAll()
+      .then((data) => {
+        if (data && data.success && data.reviews) {
+          setReviews(data.reviews);
+        }
+      })
+      .catch((err) => console.error("Failed to load reviews:", err));
+  }, []);
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -119,9 +139,9 @@ const Home = () => {
 
       {/* HERO SECTION */}
       <section className="hero">
-        <div className="hero-watermark">FREE</div>
+        <div className="hero-watermark">VND</div>
         <div className="relative z-10 flex flex-col items-center">
-          <div className="hero-badge">A DIGITAL MEDIA DIGITAL AGENCY</div>
+          {/* <div className="hero-badge">A DIGITAL MEDIA DIGITAL AGENCY</div> */}
           <h1>
             Powering<span>Digital Growth</span>
           </h1>
@@ -145,8 +165,8 @@ const Home = () => {
         {[
           { num: 150, suffix: "+", label: "CLIENTS SERVED" },
           { num: 400, suffix: "+", label: "PROJECTS DONE" },
-          { num: 7,   suffix: "X", label: "AVG. GROWTH" },
-          { num: 99,  suffix: "%", label: "SUCCESS RATE" },
+          { num: 7, suffix: "X", label: "AVG. GROWTH" },
+          { num: 99, suffix: "%", label: "SUCCESS RATE" },
         ].map((s, i) => (
           <StatItem key={i} {...s} />
         ))}
@@ -156,33 +176,33 @@ const Home = () => {
       <section id="services" className="section">
         <div className="section-label">CORE SERVICES</div>
         <h2 className="section-title">Digital Engineering</h2>
-                 <div className="services-grid">
-  {services.map((s, i) => (
-    <div className="service-card" key={i}>
-      
-      <div className="service-icon-wrap">
-        <div className="service-icon">{s.icon}</div>
-      </div>
+        <div className="services-grid">
+          {services.map((s, i) => (
+            <div className="service-card" key={i}>
 
-      <h3>{s.title}</h3>
-      <p>{s.desc}</p>
+              <div className="service-icon-wrap">
+                <div className="service-icon">{s.icon}</div>
+              </div>
 
-    </div>
-  ))}
-</div>
- 
+              <h3>{s.title}</h3>
+              <p>{s.desc}</p>
+
+            </div>
+          ))}
+        </div>
+
       </section>
 
       {/* FEATURE SPLIT */}
       <section className="section pt-0">
         <div className="feature-split">
           <div className="feature-img">
-          <img 
-            src="/images/laptop.jpeg" 
-            alt="Dashboard" 
-            className="w-full h-full object-cover"
-          />
-        </div>
+            <img
+              src="/images/laptop.jpeg"
+              alt="Dashboard"
+              className="w-full h-full object-cover"
+            />
+          </div>
           <div className="feature-content">
             <div className="section-label text-left">OUR DNA</div>
             <h2>
@@ -206,97 +226,158 @@ const Home = () => {
       </section>
 
       {/* PROCESS */}
- {/* PROCESS */}
-<section id="about" className="section">
-  <div className="section-label">ROADMAP</div>
-  <h2 className="section-title">Seamless Execution</h2>
+      {/* PROCESS */}
+      <section id="about" className="section">
+        <div className="section-label">ROADMAP</div>
+        <h2 className="section-title">Seamless Execution</h2>
 
-  <div className="process-timeline">
-    {[
-      { label: "Discovery", desc: "In-depth deep-dive into brand DNA and competitor landscape.", side: "left" },
-      { label: "Strategy", desc: "Mapping the digital architecture and high-conversion funnels.", side: "right" },
-      { label: "Execution", desc: "Rapid prototyping, development and elite-level design crafting.", side: "left" },
-      { label: "Scaling", desc: "Post-launch optimization and automated growth loops.", side: "right" },
-    ].map((step, i) => (
-      
-      <motion.div
-        key={i}
-        className={`timeline-row ${step.side}`}
-        
-        // Cleaner animation - just fade and slide
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: i * 0.15 }}
-        viewport={{ once: true, margin: "-50px" }}
-      >
-        <div className="timeline-content">
-          <h4>{step.label}</h4>
-          <p>{step.desc}</p>
+        <div className="process-timeline">
+          {[
+            { label: "Discovery", desc: "In-depth deep-dive into brand DNA and competitor landscape.", side: "left" },
+            { label: "Strategy", desc: "Mapping the digital architecture and high-conversion funnels.", side: "right" },
+            { label: "Execution", desc: "Rapid prototyping, development and elite-level design crafting.", side: "left" },
+            { label: "Scaling", desc: "Post-launch optimization and automated growth loops.", side: "right" },
+          ].map((step, i) => (
+
+            <motion.div
+              key={i}
+              className={`timeline-row ${step.side}`}
+
+              // Cleaner animation - just fade and slide
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: i * 0.15 }}
+              viewport={{ once: true, margin: "-50px" }}
+            >
+              <div className="timeline-content">
+                <h4>{step.label}</h4>
+                <p>{step.desc}</p>
+              </div>
+
+              <div className="timeline-dot" />
+              <div className="timeline-spacer" />
+            </motion.div>
+          ))}
         </div>
-
-        <div className="timeline-dot" />
-        <div className="timeline-spacer" />
-      </motion.div>
-    ))}
-  </div>
-</section>d
+      </section>
 
       {/* RECENT PROJECTS */}
       <section id="work" className="section">
         <div className="projects-header">
           <h2>Recent Projects</h2>
-          <span className="view-all">View All →</span>
+          <span className="view-all" onClick={() => navigate("/contact")}>View All →</span>
         </div>
         <div className="projects-grid">
-          {[
-            { cls: "proj-1", icon: "📄" },
-            { cls: "proj-2", icon: "🎨" },
-            { cls: "proj-3", icon: "📱" },
-          ].map((p, i) => (
-            <div className={`project-card ${p.cls}`} key={i}>
-              <div className="proj-thumb">{p.icon}</div>
-            </div>
-          ))}
+          {projects.length === 0 ? (
+            // Premium fallback templates if database has no project entries yet
+            [
+              { title: "Performance Marketing Campaign", category: "Performance Marketing", icon: "📄" },
+              { title: "Custom Web Application", category: "Tech Development", icon: "🎨" },
+              { title: "Brand Identity Design", category: "Visual Identity", icon: "📱" }
+            ].map((p, i) => (
+              <div className="project-card border border-white/5 bg-[#0e0e0e] rounded-2xl flex flex-col items-center justify-center p-6 text-center" key={i}>
+                <div className="text-4xl opacity-20 mb-4">{p.icon}</div>
+                <span className="text-[#0BB80F] text-[10px] font-bold uppercase tracking-wider">{p.category}</span>
+                <h4 className="text-white text-sm font-bold italic mt-2">{p.title}</h4>
+              </div>
+            ))
+          ) : (
+            projects.slice(0, 3).map((p, i) => (
+              <a
+                href={p.link || "#"}
+                target={p.link ? "_blank" : "_self"}
+                rel="noreferrer"
+                className="project-card block group"
+                key={p._id || i}
+              >
+                <div className="w-full h-full relative overflow-hidden bg-[#0d0d0d] border border-white/5 rounded-2xl">
+                  {p.image ? (
+                    <img
+                      src={resolveAssetUrl(p.image)}
+                      alt={p.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-5xl text-white/10 bg-[#111]">
+                      📝
+                    </div>
+                  )}
+                  {/* Hover overlay metadata */}
+                  <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5 text-left">
+                    <span className="text-[#0BB80F] text-[10px] font-bold uppercase tracking-wider mb-1">{p.category}</span>
+                    <h4 className="text-white text-base font-extrabold italic leading-snug">{p.title}</h4>
+                  </div>
+                </div>
+              </a>
+            ))
+          )}
         </div>
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="section ">
+      <section className="section">
         <div className="section-label">VOICE OF THREE</div>
         <h2 className="section-title">Client Echoes</h2>
         <div className="testi-grid">
-          {[
-            { 
-              stars: "★★★★★", 
-              text: "VND Media transformed our digital presence completely. Their performance marketing team drove a 7x return on our ad spend within just 3 months.", 
-              name: "Sarah Johnson", 
-              role: "CEO, TechFlow" 
-            },
-            { 
-              stars: "★★★★★", 
-              text: "The team at VND is exceptional. They not only built our platform but helped us understand our customers on a completely new level. Highly recommend.", 
-              name: "Marcus Theone", 
-              role: "Founder, BrandScale" 
-            },
-            { 
-              stars: "★★★★★", 
-              text: "Exceptional work, incredible communication. They delivered our entire rebrand in 6 weeks — and it looks a million times better than anything we imagined.", 
-              name: "Olivia Reed", 
-              role: "CMO, NovaTech" 
-            },
-          ].map((t, i) => (
-            <div className="testi-card" key={i}>
-              <div className="stars">{t.stars}</div>
-              <p className="testi-text">{t.text}</p>
-              <div className="testi-author">
-                <div className="testi-avatar" />
-                <div>
-                  <div className="testi-name">{t.name}</div>
-                  <div className="testi-role">{t.role}</div>
+          {reviews.length === 0 ? (
+            // Premium fallback templates if database has no reviews uploaded yet
+            [
+              {
+                stars: 5,
+                text: "VND Media transformed our digital presence completely. Their performance marketing team drove a 7x return on our ad spend within just 3 months.",
+                name: "Sarah Johnson",
+                role: "CEO, TechFlow"
+              },
+              {
+                stars: 5,
+                text: "The team at VND is exceptional. They not only built our platform but helped us understand our customers on a completely new level. Highly recommend.",
+                name: "Marcus Theone",
+                role: "Founder, BrandScale"
+              },
+              {
+                stars: 5,
+                text: "Exceptional work, incredible communication. They delivered our entire rebrand in 6 weeks — and it looks a million times better than anything we imagined.",
+                name: "Olivia Reed",
+                role: "CMO, NovaTech"
+              }
+            ].map((t, i) => (
+              <div className="testi-card" key={i}>
+                <div className="stars">{"★".repeat(t.stars)}</div>
+                <p className="testi-text">{t.text}</p>
+                <div className="testi-author">
+                  <div className="testi-avatar" />
+                  <div>
+                    <div className="testi-name">{t.name}</div>
+                    <div className="testi-role">{t.role}</div>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            reviews.slice(0, 3).map((r, i) => (
+              <div className="testi-card flex flex-col justify-between" key={r._id || i}>
+                <div>
+                  <div className="stars text-[#0BB80F] font-bold">{"★".repeat(r.stars)}</div>
+                  <p className="testi-text">{r.text}</p>
+                </div>
+                <div className="testi-author mt-4">
+                  {r.avatar ? (
+                    <img
+                      src={resolveAssetUrl(r.avatar)}
+                      alt={r.name}
+                      className="w-9 h-9 rounded-full object-cover border border-white/10"
+                    />
+                  ) : (
+                    <div className="testi-avatar flex items-center justify-center text-xs text-white/20">👤</div>
+                  )}
+                  <div>
+                    <div className="testi-name text-white font-bold">{r.name}</div>
+                    <div className="testi-role text-xs text-gray-500">{r.role}</div>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
         </div>
         <div className="brands">
           {["GOOGLE", "META", "SHOPIFY", "HUBSPOT", "SEMRUSH"].map(b => (
@@ -311,9 +392,9 @@ const Home = () => {
         <h2 className="section-title">Common Inquiries</h2>
         <div className="faq-list">
           {faqs.map((faq, i) => (
-            <div 
-              className="faq-item" 
-              key={i} 
+            <div
+              className="faq-item"
+              key={i}
               onClick={() => setOpenFaq(openFaq === i ? null : i)}
             >
               <div className="faq-q">
@@ -327,95 +408,95 @@ const Home = () => {
       </section>
 
       {/* CTA */}
-     <section className="cta-section">
-  <div className="cta-section-inner">
-    <h2>
-      Ready to Grow with
-      <span>VND Media?</span>
-    </h2>
-    <p>
-      Join the elite rank of businesses dominating their industry with futuristic digital power.
-    </p>
-    <button className="btn-primary text-[15px] px-9 py-4 rounded-full" onClick={() => navigate("/contact")}>
-      Get Your Free Audit
-    </button>
-  </div>
-</section>
+      <section className="cta-section">
+        <div className="cta-section-inner">
+          <h2>
+            Ready to Grow with
+            <span>VND Media?</span>
+          </h2>
+          <p>
+            Join the elite rank of businesses dominating their industry with futuristic digital power.
+          </p>
+          <button className="btn-primary text-[15px] px-9 py-4 rounded-full" onClick={() => navigate("/contact")}>
+            Get Your Free Audit
+          </button>
+        </div>
+      </section>
 
       {/* CONTACT */}
       <section className="contact-section">
-  <div className="contact-label">CONTACT</div>
-  <div className="contact-grid">
-    <div className="contact-left">
-      <h2>Let's Interface</h2>
-      <p>
-        Have a vision for the future? We're ready to engineer it. Reach out for a consultation.
-      </p>
-      <div className="contact-info">
-        <div className="contact-info-item">
-          <span className="contact-icon">✉</span> hello@vndmedia.agency
-        </div>
-        <div className="contact-info-item">
-          <span className="contact-icon">🌐</span> Global Operations HQ
-        </div>
-      </div>
-    </div>
+        <div className="contact-label">CONTACT</div>
+        <div className="contact-grid">
+          <div className="contact-left">
+            <h2>Let's Interface</h2>
+            <p>
+              Have a vision for the future? We're ready to engineer it. Reach out for a consultation.
+            </p>
+            <div className="contact-info">
+              <div className="contact-info-item">
+                <span className="contact-icon">✉</span> hello@vndmedia.agency
+              </div>
+              <div className="contact-info-item">
+                <span className="contact-icon">🌐</span> Global Operations HQ
+              </div>
+            </div>
+          </div>
 
-    <div className="contact-form-wrapper">
-      <form className="contact-form" onSubmit={handleSubmit}>
-        <div className="contact-form-row">
-          <input
-            type="text"
-            name="name"
-            placeholder="Full Name"
-            value={formData.name}
-            onChange={handleInputChange}
-            required
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Email Address"
-            value={formData.email}
-            onChange={handleInputChange}
-            required
-          />
+          <div className="contact-form-wrapper">
+            <form className="contact-form" onSubmit={handleSubmit}>
+              <div className="contact-form-row">
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Full Name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  required
+                />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email Address"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="contact-form-row">
+                <input
+                  type="text"
+                  name="phone"
+                  placeholder="Phone Number"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                />
+                <select
+                  name="service"
+                  className="contact-select"
+                  value={formData.service}
+                  onChange={handleInputChange}
+                >
+                  <option value="Performance Marketing">Performance Marketing</option>
+                  <option value="Tech Development">Tech Development</option>
+                  <option value="Visual Identity">Visual Identity</option>
+                  <option value="Consulting">Consulting</option>
+                </select>
+              </div>
+              <textarea
+                name="message"
+                rows={5}
+                placeholder="Tell us about your project..."
+                value={formData.message}
+                onChange={handleInputChange}
+                required
+              />
+              <button type="submit" className="btn-transmit">
+                Send Transmission
+              </button>
+            </form>
+          </div>
         </div>
-        <div className="contact-form-row">
-          <input
-            type="text"
-            name="phone"
-            placeholder="Phone Number"
-            value={formData.phone}
-            onChange={handleInputChange}
-          />
-          <select
-            name="service"
-            className="contact-select"
-            value={formData.service}
-            onChange={handleInputChange}
-          >
-            <option value="Performance Marketing">Performance Marketing</option>
-            <option value="Tech Development">Tech Development</option>
-            <option value="Visual Identity">Visual Identity</option>
-            <option value="Consulting">Consulting</option>
-          </select>
-        </div>
-        <textarea
-          name="message"
-          rows={5}
-          placeholder="Tell us about your project..."
-          value={formData.message}
-          onChange={handleInputChange}
-          required
-        />
-        <button type="submit" className="btn-transmit">
-          Send Transmission
-        </button>
-      </form>
-    </div>
-  </div>
-</section>
+      </section>
       <Footer />
     </div>
   );

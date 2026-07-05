@@ -8,6 +8,7 @@ export default function AdminLayout() {
     { name: "Careers", path: "/admin/careers" },
     { name: "Blog", path: "/admin/blog" },
     { name: "Contact", path: "/admin/contact" },
+    { name: "Portfolio", path: "/admin/portfolio" },
     { name: "Services", path: "/admin/services" },
     { name: "About", path: "/admin/about" },
   ];

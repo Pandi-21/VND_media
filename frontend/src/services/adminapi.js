@@ -66,3 +66,19 @@ export const adminCompatAPI = {
   addJob:           (body) => request("POST", "/jobs/add", body),
   updateJob:        (id, body) => request("PUT", `/jobs/update/${id}`, body),
 };
+
+// ─── Project Admin ─────────────────────────────────────────────────────────────
+export const adminProjectAPI = {
+  adminGetAll: ()             => request("GET",    "/projects/admin/all"),
+  create:      (formData)     => request("POST",   "/projects", formData, true),
+  update:      (id, formData) => request("PUT",    `/projects/${id}`, formData, true),
+  delete:      (id)           => request("DELETE", `/projects/${id}`),
+};
+
+// ─── Review Admin ──────────────────────────────────────────────────────────────
+export const adminReviewAPI = {
+  adminGetAll: ()             => request("GET",    "/reviews/admin/all"),
+  create:      (formData)     => request("POST",   "/reviews", formData, true),
+  update:      (id, formData) => request("PUT",    `/reviews/${id}`, formData, true),
+  delete:      (id)           => request("DELETE", `/reviews/${id}`),
+};

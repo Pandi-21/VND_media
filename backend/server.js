@@ -15,12 +15,20 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static("uploads"));
 
+// Simple Request Logger Middleware to display all incoming API calls in terminal console
+app.use((req, _res, next) => {
+  console.log(`[${new Date().toLocaleTimeString()}] 🌐 ${req.method} ${req.originalUrl}`);
+  next();
+});
+
 app.use("/api/auth",     require("./routes/auth.routes"));
 app.use("/api/about",    require("./routes/about.routes"));
 app.use("/api/blog",     require("./routes/blog.routes"));
 app.use("/api/careers",  require("./routes/careers.routes"));
 app.use("/api/contact",  require("./routes/contact.routes"));
 app.use("/api/services", require("./routes/services.routes"));
+app.use("/api/projects", require("./routes/project.routes"));
+app.use("/api/reviews",  require("./routes/review.routes"));
 app.use("/api",          require("./routes/compat.routes"));
 
 app.get("/", (req, res) => res.json({ message: "API is running 🚀" }));

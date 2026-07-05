@@ -11,6 +11,7 @@ import AdminLogin from "./admin/AdminLogin";
 import AdminLayout from "./admin/AdminLayout";
 import AdminBlog from "./admin/AdminBlog";
 import AdminContact from "./admin/AdminContact";
+import AdminPortfolio from "./admin/AdminPortfolio";
 import AdminServices from "./admin/AdminServices";
 import AdminAbout from "./admin/AdminAbout";
 import "./styles/main.css";
@@ -58,10 +59,11 @@ function App() {
     </ProtectedRoute>
   }
 >
- <Route index element={<div>Welcome Admin</div>} />
+  <Route index element={<div>Welcome Admin</div>} />
   <Route path="careers" element={<AdminCareers />} />
   <Route path="blog" element={<AdminBlog />} />
   <Route path="contact" element={<AdminContact />} />
+  <Route path="portfolio" element={<AdminPortfolio />} />
   <Route path="services" element={<AdminServices />} />
   <Route path="about" element={<AdminAbout />} />
 

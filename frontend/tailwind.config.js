@@ -6,7 +6,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'vnd-green': '#00FF85',
+        'vnd-green': '#0BB80F',
         'vnd-dark': '#0a0a0a',
         'vnd-card': '#111111',
         'vnd-card2': '#161616',

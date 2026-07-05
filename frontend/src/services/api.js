@@ -14,7 +14,9 @@ import {
   adminContactAPI,
   adminServicesAPI,
   adminAboutAPI,
-  adminCompatAPI
+  adminCompatAPI,
+  adminProjectAPI,
+  adminReviewAPI
 } from "./adminapi";
 
 // Re-export authAPI directly since it is fully admin-specific
@@ -97,4 +99,20 @@ export const compatAPI = {
   sendEmail:        (body) => request("POST", "/send-email", body),
   // Admin
   ...adminCompatAPI,
+};
+
+// ─── Project ──────────────────────────────────────────────────────────────────
+export const projectAPI = {
+  // Public
+  getAll: () => request("GET", "/projects"),
+  // Admin
+  ...adminProjectAPI,
+};
+
+// ─── Review ───────────────────────────────────────────────────────────────────
+export const reviewAPI = {
+  // Public
+  getAll: () => request("GET", "/reviews"),
+  // Admin
+  ...adminReviewAPI,
 };
