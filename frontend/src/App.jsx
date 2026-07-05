@@ -6,6 +6,9 @@ import Blog from "./app/Blog";
 import BlogDetail from "./app/BlogDetail";
 import Contact from "./app/Contact";
 import Careers from "./app/Careers";
+import Privacy from "./app/Privacy";
+import Terms from "./app/Terms";
+import Cookies from "./app/Cookies";
 import AdminCareers from "./admin/AdminCareers";
 import AdminLogin from "./admin/AdminLogin";
 import AdminLayout from "./admin/AdminLayout";
@@ -45,6 +48,9 @@ function App() {
   <Route path="/blog/:slug" element={<BlogDetail />} />
   <Route path="/contact" element={<Contact />} />
   <Route path="/careers" element={<Careers />} />
+  <Route path="/privacy-policy" element={<Privacy />} />
+  <Route path="/terms-of-use" element={<Terms />} />
+  <Route path="/cookie-policy" element={<Cookies />} />
 
   {/* ✅ Admin Login (separate) */}
  {/* Admin Login - admin/* க்கு முன்னாடி வரணும் */}

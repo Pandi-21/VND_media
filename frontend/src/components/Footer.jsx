@@ -1,37 +1,39 @@
 import React from 'react';
+import { Link } from "react-router-dom";
+import logo from "../assets/vnd logo.png";
 
 const Footer = () => {
   return (
     <footer>
       <div className="footer">
         <div className="footer-brand">
-          <div className="nav-logo">
-            VND<span>Media</span>
+          <div className="nav-logo" style={{ cursor: "default" }}>
+            <img src={logo} alt="VND Media Logo" style={{ height: "120px", width: "auto", objectFit: "contain" }} />
           </div>
           <p>Powering digital growth for ambitious brands worldwide.</p>
         </div>
         
         <div className="footer-col">
           <h4>Services</h4>
-          <a href="#">Performance Marketing</a>
-          <a href="#">Tech Development</a>
-          <a href="#">Visual Identity</a>
-          <a href="#">Consulting</a>
+          <Link to="/services">Performance Marketing</Link>
+          <Link to="/services">Tech Development</Link>
+          <Link to="/services">Visual Identity</Link>
+          <Link to="/services">Consulting</Link>
         </div>
         
         <div className="footer-col">
           <h4>Company</h4>
-          <a href="#">About Us</a>
-          <a href="#">Our Work</a>
-          <a href="#">Careers</a>
-          <a href="#">Blog</a>
+          <Link to="/Aboutus">About Us</Link>
+          <Link to="/">Our Work</Link>
+          <Link to="/Careers">Careers</Link>
+          <Link to="/Blog">Blog</Link>
         </div>
         
         <div className="footer-col">
           <h4>Legal</h4>
-          <a href="#">Privacy Policy</a>
-          <a href="#">Terms of Use</a>
-          <a href="#">Cookie Policy</a>
+          <Link to="/privacy-policy">Privacy Policy</Link>
+          <Link to="/terms-of-use">Terms of Use</Link>
+          <Link to="/cookie-policy">Cookie Policy</Link>
         </div>
       </div>
       

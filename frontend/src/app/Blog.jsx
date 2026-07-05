@@ -366,9 +366,11 @@ export default function Blog() {
           <h2 className="text-2xl md:text-4xl font-extrabold italic text-black leading-tight mb-6">
             NEED HELP GROWING YOUR BUSINESS?
           </h2>
-          <button className="bg-black text-white text-sm font-bold italic px-8 py-4 rounded-full hover:bg-gray-900 transition-colors tracking-wide">
-            CONTACT VND MEDIA
-          </button>
+          <Link to="/Contact">
+            <button className="bg-black text-white text-sm font-bold italic px-8 py-4 rounded-full hover:bg-gray-900 transition-colors tracking-wide">
+              CONTACT VND MEDIA
+            </button>
+          </Link>
         </div>
       </section>
 

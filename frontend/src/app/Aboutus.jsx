@@ -449,7 +449,7 @@ const MissionVisionSection = () => (
 );
 
 const StatsSection = () => (
-  <div className="stats border-y border-vnd-border my-24">
+  <div className="stats my-24">
     {STATS_DATA.map((stat, index) => (
       <StatItem key={index} num={stat.num} suffix={stat.suffix} label={stat.label} />
     ))}

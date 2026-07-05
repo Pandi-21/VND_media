@@ -103,11 +103,11 @@
 
   /* Stats Section */
   .stats {
-    @apply grid grid-cols-4 border-vnd-border ;
+    @apply grid grid-cols-4;
   }
 
   .stat-item {
-    @apply py-10 px-8 text-center  border-vnd-border;
+    @apply py-10 px-8 text-center;
   }
 
  

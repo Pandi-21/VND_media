@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { contactAPI } from "../services/api";
@@ -67,6 +67,7 @@ const initialForm = {
 };
 
 export default function Contact() {
+  const location = useLocation();
   const [form, setForm] = useState(initialForm);
   const [openFaq, setOpenFaq] = useState(null);
   const [status, setStatus] = useState("idle");
@@ -76,6 +77,12 @@ export default function Contact() {
   const [infoRef, infoVisible] = useScrollReveal(0.05);
   const [faqRef, faqVisible] = useScrollReveal(0.05);
   const [ctaRef, ctaVisible] = useScrollReveal(0.05);
+
+  useEffect(() => {
+    if (location.state?.selectedService) {
+      setForm((f) => ({ ...f, service: location.state.selectedService }));
+    }
+  }, [location.state]);
 
   const handleInput = (e) => {
     setForm((current) => ({ ...current, [e.target.name]: e.target.value }));

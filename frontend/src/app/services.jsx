@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Rocket, Facebook, Search, Video, TrendingUp, BarChart2 } from "lucide-react";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const NAV_LINKS = ["Services", "Work", "About", "FAQ"];
 
@@ -106,6 +106,7 @@ function RevealBlock({ children, from = "left", delay = 0 }) {
 
 function ServiceRow({ s }) {
   const isLeft = s.side === "left";
+  const navigate = useNavigate();
   return (
     <div style={{
       display: "flex",
@@ -134,6 +135,7 @@ function ServiceRow({ s }) {
             ))}
           </ul>
           <button
+            onClick={() => navigate("/contact", { state: { selectedService: s.title } })}
             style={{
               background: "transparent",
               border: "1px solid rgba(11,184,15,0.3)",
