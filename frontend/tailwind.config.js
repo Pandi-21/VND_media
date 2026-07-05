@@ -14,6 +14,7 @@ module.exports = {
         'vnd-muted': '#888888',
       },
       fontFamily: {
+        'sans': ['Inter', 'sans-serif'],
         'display': ['Inter', 'sans-serif'],
         'body': ['Inter', 'sans-serif'],
       },

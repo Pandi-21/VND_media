@@ -1,10 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-const API_BASE = "http://localhost:5000/api/blog";
-
-// ✅ Token header helper
-const authHeaders = () => ({
-  Authorization: `Bearer ${localStorage.getItem("vnd_admin_token")}`,
-});
+import { blogAPI } from "../services/api";
 
 const CATEGORIES = [
   "All",
@@ -54,13 +49,10 @@ function PostModal({ post, onClose, onSaved }) {
       });
       if (coverImage) fd.append("coverImage", coverImage);
 
-      const url    = editing ? `${API_BASE}/${post._id}` : API_BASE;
-      const method = editing ? "PUT" : "POST";
+      const data = editing
+        ? await blogAPI.update(post._id, fd)
+        : await blogAPI.create(fd);
 
-      // ✅ auth header — Content-Type போடாதீங்க, browser multipart auto set பண்ணும்
-      const res  = await fetch(url, { method, body: fd, headers: authHeaders() });
-      const data = await res.json();
-      if (!data.success) throw new Error(data.message);
       onSaved(data.post);
     } catch (e) {
       setError(e.message);
@@ -180,11 +172,7 @@ export default function AdminBlog() {
       if (debouncedSearch) params.set("search", debouncedSearch);
       if (category !== "All") params.set("category", category);
 
-      const res  = await fetch(`${API_BASE}/admin/all?${params}`, {
-        headers: authHeaders(),
-      });
-      const data = await res.json();
-      if (!data.success) throw new Error(data.message);
+      const data = await blogAPI.adminGetAll(params.toString());
       setPosts(data.posts);
       setTotal(data.total || data.posts.length);
       setTotalPages(data.pages || 1);
@@ -202,12 +190,7 @@ export default function AdminBlog() {
   async function handleToggle(id) {
     setTogglingId(id);
     try {
-      const res  = await fetch(`${API_BASE}/${id}/toggle`, {
-        method: "PATCH",
-        headers: authHeaders(),
-      });
-      const data = await res.json();
-      if (!data.success) throw new Error(data.message);
+      const data = await blogAPI.togglePublish(id);
       setPosts((prev) => prev.map((p) => p._id === id ? { ...p, isPublished: data.isPublished } : p));
     } catch (e) {
       alert("Toggle failed: " + e.message);
@@ -219,12 +202,7 @@ export default function AdminBlog() {
   // ✅ auth header added
   async function handleDelete(id) {
     try {
-      const res  = await fetch(`${API_BASE}/${id}`, {
-        method: "DELETE",
-        headers: authHeaders(),
-      });
-      const data = await res.json();
-      if (!data.success) throw new Error(data.message);
+      await blogAPI.delete(id);
       setPosts((prev) => prev.filter((p) => p._id !== id));
       setTotal((t) => t - 1);
     } catch (e) {

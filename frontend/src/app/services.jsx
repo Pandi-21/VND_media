@@ -198,31 +198,20 @@ function ServiceRow({ s }) {
   );
 }
 
-function FrameworkStep({ f }) {
+function FrameworkStep({ f, i }) {
   const isLeft = f.side === "left";
   return (
-    <div style={{
-      display: "flex",
-      alignItems: "center",
-      gap: "36px",
-      flexDirection: isLeft ? "row" : "row-reverse",
-      marginBottom: "44px",
-    }}>
-      <RevealBlock from={isLeft ? "left" : "right"} delay={0}>
-        <div style={{ flex: 1, textAlign: isLeft ? "right" : "left" }}>
-          <h3 style={{ color: "#0BB80F", fontWeight: "800", fontSize: "18px", lineHeight: 1.25, marginBottom: "6px" }}>{f.title}</h3>
-          <p style={{ color: "#9ca3af", fontSize: "13.5px", lineHeight: "1.7", maxWidth: "280px", marginLeft: isLeft ? "auto" : 0 }}>{f.desc}</p>
+    <RevealBlock from={isLeft ? "left" : "right"} delay={i * 120}>
+      <div className={`timeline-row ${f.side}`} style={{ marginBottom: "60px" }}>
+        <div className="timeline-content">
+          <h4>{f.title}</h4>
+          <p style={{ color: "#9ca3af", fontSize: "13.5px", lineHeight: "1.7" }}>{f.desc}</p>
         </div>
-      </RevealBlock>
-      <div style={{
-        width: "46px", height: "46px", borderRadius: "50%",
-        border: "1px solid rgba(11,184,15,0.3)",
-        background: "#0d0d0d",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        fontSize: "18px", flexShrink: 0, zIndex: 2,
-      }}>{f.icon}</div>
-      <div style={{ flex: 1 }} />
-    </div>
+
+        <div className="timeline-dot" />
+        <div className="timeline-spacer" />
+      </div>
+    </RevealBlock>
   );
 }
 
@@ -311,7 +300,7 @@ export default function Services() {
       </section>
 
       {/* THE PROCESS */}
-      <section style={{ maxWidth: "680px", margin: "0 auto", padding: "0 32px 100px" }}>
+      <section style={{ maxWidth: "800px", margin: "0 auto", padding: "0 32px 100px" }}>
         <RevealBlock from="left">
           <div style={{ textAlign: "center", marginBottom: "56px" }}>
             <h2 style={{ fontSize: "38px", fontWeight: "800", letterSpacing: "-0.3px", lineHeight: 1.2 }}>
@@ -322,13 +311,8 @@ export default function Services() {
             </p>
           </div>
         </RevealBlock>
-        <div style={{ position: "relative" }}>
-          <div style={{
-            position: "absolute", left: "50%", top: 0, bottom: 0,
-            width: "1px", background: "rgba(11,184,15,0.13)",
-            transform: "translateX(-50%)",
-          }} />
-          {FRAMEWORK.map((f) => <FrameworkStep key={f.title} f={f} />)}
+        <div className="process-timeline">
+          {FRAMEWORK.map((f, i) => <FrameworkStep key={f.title} f={f} i={i} />)}
         </div>
       </section>
 

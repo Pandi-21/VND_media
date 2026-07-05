@@ -1,19 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
+import { aboutAPI, resolveAssetUrl } from "../services/api";
 
 const accent = "#0BB80F";
-const API_ROOT = import.meta.env.VITE_API_URL || "http://localhost:5000";
-const API_BASE = API_ROOT.endsWith("/api") ? API_ROOT : `${API_ROOT}/api`;
-const SITE_BASE = API_ROOT.endsWith("/api") ? API_ROOT.slice(0, -4) : API_ROOT;
-
-const authHeader = () => ({
-  Authorization: `Bearer ${localStorage.getItem("vnd_admin_token")}`,
-});
-
-const resolveAssetUrl = (url) => {
-  if (!url) return "";
-  if (url.startsWith("http")) return url;
-  return `${SITE_BASE}${url}`;
-};
 
 const AdminAbout = () => {
   const [teamMembers, setTeamMembers] = useState([]);
@@ -55,13 +43,7 @@ const AdminAbout = () => {
     setPageError("");
 
     try {
-      const res = await fetch(`${API_BASE}/about`);
-      const data = await res.json();
-
-      if (!res.ok || !data.success) {
-        throw new Error(data.message || "Failed to fetch about data.");
-      }
-
+      const data = await aboutAPI.get();
       setTeamMembers(data.data?.teamMembers || []);
       setClients(data.data?.testimonials || []);
     } catch (error) {
@@ -123,16 +105,7 @@ const AdminAbout = () => {
       formData.append("photo", teamForm.photo);
       formData.append("order", String(teamMembers.length));
 
-      const res = await fetch(`${API_BASE}/about/admin/team`, {
-        method: "POST",
-        headers: authHeader(),
-        body: formData,
-      });
-      const data = await res.json();
-
-      if (!res.ok || !data.success) {
-        throw new Error(data.message || "Failed to add team member.");
-      }
+      const data = await aboutAPI.addTeamMember(formData);
 
       setTeamMembers((current) => [...current, data.member]);
       setTeamForm({ name: "", role: "", photo: null, photoPreview: null });
@@ -148,16 +121,7 @@ const AdminAbout = () => {
   const handleRemoveTeam = async (id) => {
     setTeamDeletingId(id);
     try {
-      const res = await fetch(`${API_BASE}/about/admin/team/${id}`, {
-        method: "DELETE",
-        headers: authHeader(),
-      });
-      const data = await res.json();
-
-      if (!res.ok || !data.success) {
-        throw new Error(data.message || "Failed to delete team member.");
-      }
-
+      await aboutAPI.deleteTeamMember(id);
       setTeamMembers((current) => current.filter((member) => member._id !== id));
       showToast("success", "Team member removed.");
     } catch (error) {
@@ -215,16 +179,7 @@ const AdminAbout = () => {
       formData.append("video", clientForm.video);
       formData.append("order", String(clients.length));
 
-      const res = await fetch(`${API_BASE}/about/admin/testimonials`, {
-        method: "POST",
-        headers: authHeader(),
-        body: formData,
-      });
-      const data = await res.json();
-
-      if (!res.ok || !data.success) {
-        throw new Error(data.message || "Failed to add client video.");
-      }
+      const data = await aboutAPI.addTestimonial(formData);
 
       setClients((current) => [...current, data.testimonial]);
       setClientForm({ name: "", company: "", video: null, videoName: "" });
@@ -240,16 +195,7 @@ const AdminAbout = () => {
   const handleRemoveClient = async (id) => {
     setClientDeletingId(id);
     try {
-      const res = await fetch(`${API_BASE}/about/admin/testimonials/${id}`, {
-        method: "DELETE",
-        headers: authHeader(),
-      });
-      const data = await res.json();
-
-      if (!res.ok || !data.success) {
-        throw new Error(data.message || "Failed to delete testimonial.");
-      }
-
+      await aboutAPI.deleteTestimonial(id);
       setClients((current) => current.filter((client) => client._id !== id));
       showToast("success", "Client testimonial removed.");
     } catch (error) {

@@ -4,9 +4,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { FiTrendingUp,FiCode ,FiPenTool  } from "react-icons/fi";
 import { motion } from "framer-motion";
-
-const API_ROOT = import.meta.env.VITE_API_URL || "http://localhost:5000";
-const API_BASE = API_ROOT.endsWith("/api") ? API_ROOT : `${API_ROOT}/api`;
+import { contactAPI } from '../services/api';
 
 const useCountUp = (end, duration = 2500) => {
   const [count, setCount] = useState(0);
@@ -93,24 +91,14 @@ const Home = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`${API_BASE}/contact`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          subject: formData.service,
-          service: formData.service,
-          message: formData.message,
-        }),
+      await contactAPI.submit({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        subject: formData.service,
+        service: formData.service,
+        message: formData.message,
       });
-
-      const data = await res.json();
-
-      if (!res.ok || !data.success) {
-        throw new Error(data.message || "Failed to send inquiry.");
-      }
 
       alert("Thank you for reaching out! We'll contact you soon.");
       setFormData({

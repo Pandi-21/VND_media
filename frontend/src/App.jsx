@@ -3,6 +3,7 @@ import Home from "./app/Home";
 import Services from "./app/services";
 import Aboutus from "./app/Aboutus";
 import Blog from "./app/Blog";
+import BlogDetail from "./app/BlogDetail";
 import Contact from "./app/Contact";
 import Careers from "./app/Careers";
 import AdminCareers from "./admin/AdminCareers";
@@ -15,17 +16,32 @@ import AdminAbout from "./admin/AdminAbout";
 import "./styles/main.css";
  
 import ProtectedRoute from "./Auth/ProtectedRoute";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, [pathname]);
+  return null;
+}
 
 function App() {
   return (
   <BrowserRouter>
+  <ScrollToTop />
   <Routes>
-
+ 
   {/* Public */}
   <Route path="/" element={<Home />} />
   <Route path="/services" element={<Services />} />
   <Route path="/aboutus" element={<Aboutus />} />
   <Route path="/blog" element={<Blog />} />
+  <Route path="/blog/:slug" element={<BlogDetail />} />
   <Route path="/contact" element={<Contact />} />
   <Route path="/careers" element={<Careers />} />
 

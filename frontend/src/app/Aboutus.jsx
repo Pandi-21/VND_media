@@ -13,16 +13,7 @@ import {
   CheckCheck,
   Wrench,
 } from "lucide-react";
-
-const API_ROOT = import.meta.env.VITE_API_URL || "http://localhost:5000";
-const API_BASE = API_ROOT.endsWith("/api") ? API_ROOT : `${API_ROOT}/api`;
-const SITE_BASE = API_ROOT.endsWith("/api") ? API_ROOT.slice(0, -4) : API_ROOT;
-
-const resolveAssetUrl = (url) => {
-  if (!url) return "";
-  if (url.startsWith("http")) return url;
-  return `${SITE_BASE}${url}`;
-};
+import { aboutAPI, resolveAssetUrl } from "../services/api";
 
 const useCountUp = (end, duration = 2500) => {
   const [count, setCount] = useState(0);
@@ -45,7 +36,7 @@ const useCountUp = (end, duration = 2500) => {
           }
         }, 16);
       }
-    }, { threshold: 0.1 });
+    });
 
     if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
@@ -158,12 +149,9 @@ const FALLBACK_TEAM = [
 const StatItem = ({ num, suffix, label }) => {
   const { count, ref } = useCountUp(num);
   return (
-    <div ref={ref} className="text-center">
-      <div className="text-3xl md:text-4xl font-extrabold text-[#0BB80F]">
-        {count}
-        {suffix}
-      </div>
-      <div className="text-gray-400 text-xs font-bold mt-1 tracking-widest">{label}</div>
+    <div className="stat-item" ref={ref}>
+      <div className="stat-num">{count}<span>{suffix}</span></div>
+      <div className="stat-label">{label}</div>
     </div>
   );
 };
@@ -461,13 +449,11 @@ const MissionVisionSection = () => (
 );
 
 const StatsSection = () => (
-  <section className="px-6 py-12 mb-24">
-    <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-      {STATS_DATA.map((stat, index) => (
-        <StatItem key={index} num={stat.num} suffix={stat.suffix} label={stat.label} />
-      ))}
-    </div>
-  </section>
+  <div className="stats border-y border-vnd-border my-24">
+    {STATS_DATA.map((stat, index) => (
+      <StatItem key={index} num={stat.num} suffix={stat.suffix} label={stat.label} />
+    ))}
+  </div>
 );
 
 const CoreValuesSection = () => {
@@ -686,13 +672,9 @@ export default function Aboutus() {
   useEffect(() => {
     const loadAboutData = async () => {
       try {
-        const res = await fetch(`${API_BASE}/about`);
-        const data = await res.json();
-
-        if (res.ok && data.success) {
-          setTeamMembers(data.data?.teamMembers || []);
-          setTestimonials(data.data?.testimonials || []);
-        }
+        const data = await aboutAPI.get();
+        setTeamMembers(data.data?.teamMembers || []);
+        setTestimonials(data.data?.testimonials || []);
       } catch (_error) {
       } finally {
         setLoading(false);

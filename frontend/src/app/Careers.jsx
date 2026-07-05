@@ -1,9 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-
-const BASE =
-  process.env.NODE_ENV === "production" ? "" : "http://localhost:5000";
+import { compatAPI } from "../services/api";
+import { motion } from "framer-motion";
 
 const PERKS = [
   { icon: "🌐", title: "FLEXIBLE WORK",    desc: "Work from anywhere. We value results and create clarity over office situations." },
@@ -13,10 +12,10 @@ const PERKS = [
 ];
 
 const JOURNEY = [
-  { label: "APPLY",     desc: "Submit your portfolio and digital footprint through our portal.", align: "right", active: true  },
-  { label: "SCREENING", desc: "Our talent scouts review your creative DNA and past impact.",      align: "left",  active: false },
-  { label: "INTERVIEW", desc: "Deep dive into your process with our creative leads.",             align: "right", active: false },
-  { label: "OFFER",     desc: "Welcome to the Void. Get ready to build the future.",             align: "left",  active: false },
+  { label: "APPLY",     desc: "Submit your portfolio and digital footprint through our portal.", side: "left" },
+  { label: "SCREENING", desc: "Our talent scouts review your creative DNA and past impact.",      side: "right" },
+  { label: "INTERVIEW", desc: "Deep dive into your process with our creative leads.",             side: "left" },
+  { label: "OFFER",     desc: "Welcome to the Void. Get ready to build the future.",             side: "right" },
 ];
 
 export default function Careers() {
@@ -34,8 +33,7 @@ export default function Careers() {
 
   // ── fetch live job postings from backend ────────────────────────────────
   useEffect(() => {
-    fetch(`${BASE}/api/jobs/all`)
-      .then((r) => r.json())
+    compatAPI.getJobsAll()
       .then((data) => setJobs(Array.isArray(data) ? data : []))
       .catch(() => setJobs([]))
       .finally(() => setJobsLoading(false));
@@ -95,19 +93,9 @@ export default function Careers() {
       form.append("resume", file);
     }
 
-    // 🔍 DEBUG (remove later if needed)
-    for (let pair of form.entries()) {
-      console.log(pair[0], pair[1]);
-    }
+    try {
+      await compatAPI.careersApply(form);
 
-    const res = await fetch(`${BASE}/api/careers/apply`, {
-      method: "POST",
-      body: form,
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
       setSubmitStatus({
         type: "success",
         message: "✅ Application submitted! We'll be in touch soon.",
@@ -126,10 +114,10 @@ export default function Careers() {
       setFileName("");
 
       setTimeout(() => setSubmitStatus({ type: "", message: "" }), 5000);
-    } else {
+    } catch (error) {
       setSubmitStatus({
         type: "error",
-        message: data.message || "Something went wrong. Please try again.",
+        message: error.message || "❌ Failed to submit application. Please try again.",
       });
     }
   } catch (error) {
@@ -256,30 +244,27 @@ export default function Careers() {
       </section>
 
       {/* ── JOURNEY ── */}
-      <section className="px-6 pb-24 max-w-4xl mx-auto text-center">
-        <h2 className="text-2xl font-extrabold italic tracking-widest mb-16">THE JOURNEY</h2>
-        <div className="relative">
-          <div className="absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2"
-            style={{ background: "linear-gradient(to bottom, #00ff7f30, #00ff7f10)" }} />
-          <div className="space-y-14">
-            {JOURNEY.map((step, i) => (
-              <div key={step.label} className={`relative flex items-center gap-6 ${step.align === "right" ? "flex-row" : "flex-row-reverse"}`}>
-                <div className={`flex-1 ${step.align === "right" ? "text-right" : "text-left"}`}>
-                  {step.align === "left" && (
-                    <h3 className="font-extrabold text-sm italic mb-1" style={{ color: "#0BB80F" }}>{step.label}</h3>
-                  )}
-                  <p className="text-gray-500 text-xs leading-relaxed max-w-xs"
-                    style={{ marginLeft: step.align === "left" ? 0 : "auto" }}>{step.desc}</p>
-                  {step.align === "right" && (
-                    <h3 className="font-extrabold text-sm italic mt-1" style={{ color: "#0BB80F" }}>{step.label}</h3>
-                  )}
-                </div>
-                <div className="relative z-10 w-4 h-4 rounded-full border-2 flex-shrink-0"
-                  style={{ borderColor: "#0BB80F", background: i === 0 ? "#0BB80F" : "#0a0a0a" }} />
-                <div className="flex-1" />
+      <section className="px-6 pb-24 max-w-4xl mx-auto">
+        <h2 className="text-2xl font-extrabold italic tracking-widest mb-16 text-center">THE JOURNEY</h2>
+        <div className="process-timeline">
+          {JOURNEY.map((step, i) => (
+            <motion.div
+              key={i}
+              className={`timeline-row ${step.side}`}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: i * 0.15 }}
+              viewport={{ once: true, margin: "-50px" }}
+            >
+              <div className="timeline-content">
+                <h4>{step.label}</h4>
+                <p>{step.desc}</p>
               </div>
-            ))}
-          </div>
+
+              <div className="timeline-dot" />
+              <div className="timeline-spacer" />
+            </motion.div>
+          ))}
         </div>
       </section>
 

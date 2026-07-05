@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-const API = "/api/auth/login"; 
+import { authAPI, setAuthToken } from "../services/api";
 
 export default function AdminLogin() {
   const navigate = useNavigate();
@@ -21,23 +20,22 @@ export default function AdminLogin() {
 
     setLoading(true);
     try {
-      const res = await fetch(API, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        // Send as both username AND email so backend accepts either
-        body: JSON.stringify({ username: form.username, email: form.username, password: form.password }),
+      const data = await authAPI.login({
+        username: form.username,
+        email: form.username,
+        password: form.password
       });
 
-      const data = await res.json();
-
-      if (res.ok && data.token) {
+      if (data.token) {
+        setAuthToken(data.token);
+        // Also keep localStorage.setItem("vnd_admin_token", data.token) since ProtectedRoute or Layout might read from it directly
         localStorage.setItem("vnd_admin_token", data.token);
         navigate("/admin/careers");
       } else {
-        setError(data.message || "Invalid credentials.");
+        setError("Invalid credentials.");
       }
     } catch (err) {
-      setError("Cannot connect to server. Please try again.");
+      setError(err.message || "Cannot connect to server. Please try again.");
     } finally {
       setLoading(false);
     }

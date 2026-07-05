@@ -1,14 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-
-const BASE =
-  process.env.NODE_ENV === "production"
-    ? ""
-    : "http://localhost:5000";
-
-const authHeader = () => ({
-  Authorization: `Bearer ${localStorage.getItem("vnd_admin_token")}`,
-  "Content-Type": "application/json",
-});
+import { compatAPI } from "../services/api";
 
 // ─── small helpers ────────────────────────────────────────────────────────────
 
@@ -88,8 +79,7 @@ export default function AdminCareers() {
   const fetchJobs = useCallback(async () => {
     setLoadingJobs(true);
     try {
-      const res  = await fetch(`${BASE}/api/jobs/all`);
-      const data = await res.json();
+      const data = await compatAPI.getJobsAll();
       setJobs(data);
     } catch { showToast("error", "Failed to load jobs"); }
     finally   { setLoadingJobs(false); }
@@ -98,8 +88,7 @@ export default function AdminCareers() {
   const fetchApps = useCallback(async () => {
     setLoadingApps(true);
     try {
-      const res  = await fetch(`${BASE}/api/careers/all`, { headers: authHeader() });
-      const data = await res.json();
+      const data = await compatAPI.getCareersAll();
       setApps(Array.isArray(data) ? data : []);
     } catch { showToast("error", "Failed to load applications"); }
     finally   { setLoadingApps(false); }
@@ -124,10 +113,11 @@ export default function AdminCareers() {
     }
     setJobSaving(true);
     try {
-      const url    = editingJob ? `${BASE}/api/jobs/update/${editingJob._id}` : `${BASE}/api/jobs/add`;
-      const method = editingJob ? "PUT" : "POST";
-      const res    = await fetch(url, { method, headers: authHeader(), body: JSON.stringify(jobForm) });
-      if (!res.ok) throw new Error();
+      if (editingJob) {
+        await compatAPI.updateJob(editingJob._id, jobForm);
+      } else {
+        await compatAPI.addJob(jobForm);
+      }
       showToast("success", editingJob ? "Job updated!" : "Job added!");
       setJobModal(false);
       fetchJobs();
@@ -138,7 +128,7 @@ export default function AdminCareers() {
   const deleteJob = async (id) => {
     if (!window.confirm("Delete this job posting?")) return;
     try {
-      await fetch(`${BASE}/api/jobs/delete/${id}`, { method: "DELETE", headers: authHeader() });
+      await compatAPI.deleteJob(id);
       showToast("success", "Job deleted");
       fetchJobs();
     } catch { showToast("error", "Failed to delete job"); }
@@ -149,7 +139,7 @@ export default function AdminCareers() {
   const deleteApp = async (id) => {
     if (!window.confirm("Delete this application permanently?")) return;
     try {
-      await fetch(`${BASE}/api/careers/delete/${id}`, { method: "DELETE", headers: authHeader() });
+      await compatAPI.deleteCareer(id);
       showToast("success", "Application deleted");
       if (selectedApp?._id === id) setSelectedApp(null);
       fetchApps();

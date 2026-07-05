@@ -1,13 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
+import { contactAPI } from "../services/api";
 
 const accent = "#0BB80F";
-const API_ROOT = import.meta.env.VITE_API_URL || "http://localhost:5000";
-const API_BASE = API_ROOT.endsWith("/api") ? API_ROOT : `${API_ROOT}/api`;
-
-const authHeader = () => ({
-  Authorization: `Bearer ${localStorage.getItem("vnd_admin_token")}`,
-  "Content-Type": "application/json",
-});
 
 const emptyEditor = {
   isRead: false,
@@ -68,15 +62,7 @@ export default function AdminContact() {
     setPageError("");
 
     try {
-      const res = await fetch(`${API_BASE}/contact/admin/all`, {
-        headers: authHeader(),
-      });
-      const data = await res.json();
-
-      if (!res.ok || !data.success) {
-        throw new Error(data.message || "Failed to load contact submissions.");
-      }
-
+      const data = await contactAPI.getAll();
       const nextSubmissions = data.submissions || [];
       setSubmissions(nextSubmissions);
 
@@ -112,15 +98,7 @@ export default function AdminContact() {
 
     setLoadingDetail(true);
     try {
-      const res = await fetch(`${API_BASE}/contact/admin/${id}`, {
-        headers: authHeader(),
-      });
-      const data = await res.json();
-
-      if (!res.ok || !data.success) {
-        throw new Error(data.message || "Failed to load submission details.");
-      }
-
+      const data = await contactAPI.getOne(id);
       const submission = data.submission;
       setSelectedSubmission(submission);
       setEditor({
@@ -154,17 +132,7 @@ export default function AdminContact() {
     setPageError("");
 
     try {
-      const res = await fetch(`${API_BASE}/contact/admin/${selectedId}`, {
-        method: "PATCH",
-        headers: authHeader(),
-        body: JSON.stringify(editor),
-      });
-      const data = await res.json();
-
-      if (!res.ok || !data.success) {
-        throw new Error(data.message || "Failed to update submission.");
-      }
-
+      const data = await contactAPI.update(selectedId, editor);
       setSelectedSubmission(data.submission);
       setSubmissions((current) =>
         current.map((item) => (item._id === data.submission._id ? data.submission : item))
@@ -180,16 +148,7 @@ export default function AdminContact() {
   const handleDelete = async (id) => {
     setDeletingId(id);
     try {
-      const res = await fetch(`${API_BASE}/contact/admin/${id}`, {
-        method: "DELETE",
-        headers: authHeader(),
-      });
-      const data = await res.json();
-
-      if (!res.ok || !data.success) {
-        throw new Error(data.message || "Failed to delete submission.");
-      }
-
+      await contactAPI.delete(id);
       const nextSubmissions = submissions.filter((item) => item._id !== id);
       setSubmissions(nextSubmissions);
 

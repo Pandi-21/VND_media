@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
+import { Link } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-
-const API_BASE = "http://localhost:5000/api/blog";
+import { blogAPI } from "../services/api";
 
 const CATEGORIES = [
   "All",
@@ -116,9 +116,7 @@ export default function Blog() {
       if (debouncedSearch) params.set("search", debouncedSearch);
       if (activeCategory !== "All") params.set("category", activeCategory);
 
-      const res  = await fetch(`${API_BASE}?${params}`);
-      const data = await res.json();
-      if (!data.success) throw new Error(data.message);
+      const data = await blogAPI.getAll(params.toString());
 
       setPosts(data.posts);
       setTotal(data.total);
@@ -243,13 +241,13 @@ export default function Blog() {
                 <p className="text-gray-400 text-sm leading-relaxed mb-6">
                   {featured.excerpt}
                 </p>
-                <a
-                  href={`/blog/${featured.slug}`}
+                <Link
+                  to={`/blog/${featured.slug}`}
                   className="self-start text-black text-xs font-bold px-6 py-3 rounded-full inline-flex items-center gap-2 hover:opacity-90 transition-opacity"
                   style={{ background: "#0BB80F" }}
                 >
                   READ MORE <span>→</span>
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -282,9 +280,9 @@ export default function Blog() {
             {gridPosts.length > 0 && (
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 {gridPosts.map((post) => (
-                  <a key={post._id} href={`/blog/${post.slug}`}>
+                  <Link key={post._id} to={`/blog/${post.slug}`}>
                     <ArticleCard post={post} />
-                  </a>
+                  </Link>
                 ))}
               </div>
             )}

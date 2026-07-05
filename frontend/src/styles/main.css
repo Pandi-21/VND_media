@@ -10,8 +10,19 @@
     box-sizing: border-box;
   }
 
+  html {
+    font-family: "Inter", sans-serif;
+  }
+
   body {
     @apply bg-vnd-dark text-white font-body;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font-family: inherit;
   }
 
   #root {
